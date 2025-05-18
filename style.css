@@ -1,0 +1,62 @@
+body {
+  margin: 0;
+  overflow: hidden;
+  background-color: #000000;
+  color: rgb(93, 170, 97);
+  font-family: sans-serif;
+}
+canvas { display: block; }
+
+header {
+  text-align: center;
+  font-size: 2rem;
+  margin: 50px 0 0 0;
+  font-family: 'Rounded Mplus 1c', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+#loading, #error {
+  position: absolute;
+  top: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  z-index: 10;
+  background: rgba(0,0,0,0.7);
+}
+#loading { left: 20px; }
+#error   { right: 20px; color: red; display: none; }
+
+#toggleAxes, #toggleEdges {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  z-index: 10;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.1);
+  color: #5daa61;
+  border: 1px solid #5daa61;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+#toggleEdges {
+  left: 140px; /* shift right so buttons don't overlap */
+}
+
+#opacityLabel, #opacitySlider {
+  position: absolute;
+  left: 20px;
+  z-index: 10;
+  font-size: 1rem;
+  color: #5daa61;
+  user-select: none;
+}
+#opacityLabel {
+  pointer-events: none;
+  bottom: 80px;  /* above the buttons */
+  display: block;
+  margin-bottom: 5px;
+}
+#opacitySlider {
+  bottom: 70px;  /* above the buttons */
+  width: 150px;
+}

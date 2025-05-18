@@ -1,0 +1,6 @@
+{
+  "liveServer.settings.wait": 100,
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 500,
+  "liveServer.settings.AdvanceCustomBrowserCmdLine": "code --reuse-window --new-window --goto http://127.0.0.1:5500/ClosedDelaunayInS3/index.html"
+}
