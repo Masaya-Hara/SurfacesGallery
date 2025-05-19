@@ -2,7 +2,9 @@ body {
   margin: 0;
   overflow: hidden;
   background-color: #000000;
-  color: rgb(93, 170, 97);
+  /* color: rgb(93, 170, 97); */
+  /* color: rgb(209, 122, 122); */
+  color: rgb(196, 196, 196);
   font-family: sans-serif;
 }
 canvas { display: block; }
@@ -32,14 +34,14 @@ header {
   z-index: 10;
   padding: 10px 14px;
   background: rgba(255,255,255,0.1);
-  color: #5daa61;
-  border: 1px solid #5daa61;
+  color: #cacaca;
+  border: 1px solid #cacaca;
   border-radius: 5px;
   font-size: 1rem;
   cursor: pointer;
 }
 #toggleEdges {
-  left: 140px; /* shift right so buttons don't overlap */
+  left: 150px; /* shift right so buttons don't overlap */
 }
 
 #opacityLabel, #opacitySlider {
@@ -47,7 +49,7 @@ header {
   left: 20px;
   z-index: 10;
   font-size: 1rem;
-  color: #5daa61;
+  color: #cacaca;
   user-select: none;
 }
 #opacityLabel {
