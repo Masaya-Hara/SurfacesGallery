@@ -7,8 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Work+Sans&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
 
-  <style>
-    /* Style for layout and typography */
+<style>
     .section-heading-wrapper {
       padding: 0 15px;
     }
@@ -26,8 +25,8 @@
     body {
       margin: 0;
       font-family: 'Work Sans', sans-serif;
-      background-color: #fcf9f5;
-      color: #40342e;
+      background-color: #f1f1f1; /* soft pink */
+      color: #4c4c4c; /* keep text black */
     }
     .hero {
       padding: 80px 20px 20px;
@@ -40,18 +39,18 @@
     }
     .hero p {
       font-size: 1.2rem;
-      color: #5a4c45;
+      color: #4c4c4c;
       margin-top: 1rem;
     }
     .section-heading {
       font-family: 'Playfair Display', serif;
       font-size: 1.8rem;
       margin: 30px 20px 10px;
-      color: #40342e;
+      color: #4c4c4c;
       cursor: pointer;
     }
     .section-heading.active {
-      background-color: #f0e8dd;
+      background-color: #dfdfdf;
       padding: 10px 20px;
       border-radius: 8px;
     }
@@ -59,7 +58,7 @@
       display: flex;
       align-items: center;
       gap: 20px;
-      background-color: #f2ece6;
+      background-color: #e0f2f1; /* light blue */
       padding: 20px;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.05);
@@ -78,42 +77,40 @@
     }
     .illustration-info p {
       margin: 0 0 10px;
-      color: #555;
+      color: #4c4c4c;
     }
     .view-link {
       font-weight: bold;
       text-decoration: none;
-      color: #7a4e2b;
-      border: 1px solid #7a4e2b;
+      color: #4c4c4c; /* accent from blue-green */
+      border: 1px solid #4c4c4c;
       padding: 6px 12px;
       border-radius: 6px;
       transition: 0.2s;
     }
     .view-link:hover {
-      background-color: #7a4e2b;
+      background-color: #4c4c4c;
       color: #fff;
     }
     .nav-link {
-      color: #7a4e2b;
+      color: #4c4c4c;
       text-decoration: none;
       padding: 6px 10px;
       border-radius: 6px;
     }
     .nav-link.active {
-      background-color: #e6dfd6;
+      background-color: #dfdfdf; /* pale green */
       font-weight: 700;
     }
     footer {
       text-align: center;
       font-size: 0.8rem;
-      color: #8e8378;
+      color: #4c4c4c;
       padding: 40px 0;
     }
     #surfaces-dropdown a:hover {
-      background-color: rgba(242, 236, 230, 0.7);
+      background-color: #dfdfdf; /* hover from light blue #f35506 */
     }
-
-    /* Center the Geometry section content vertically and horizontally */
     #geometry-section {
       display: flex;
       flex-direction: column;
@@ -135,14 +132,13 @@
             Surfaces<span style="display:inline-block; width: 8px;"></span><span id="surfaces-caret" style="display: inline-block; transition: transform 0.3s ease;">▸</span>
           </span>
         </a>
-        <div id="surfaces-dropdown" style="display: none; position: absolute; top: 100%; left: 0; background: rgba(252, 249, 245, 0.7); box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 10px 0; border-radius: 6px; z-index: 1001; min-width: 240px;">
-          <a href="#" onclick="scrollToSection('minimal-surfaces')" style="display: block; padding: 6px 20px; color: #7a4e2b; text-decoration: none;">Minimal surfaces in \(\mathbb{R}^3\)</a>
-          <a href="#" onclick="scrollToSection('cmc-s3')" style="display: block; padding: 6px 20px; color: #7a4e2b; text-decoration: none;">CMC \(1\) surfaces in \( \mathbb{S}^3 \)</a>
-          <a href="#" onclick="scrollToSection('cmc-h3')" style="display: block; padding: 6px 20px; color: #7a4e2b; text-decoration: none;">CMC \(1\) surfaces in \( \mathbb{H}^3 \)</a>
+        <div id="surfaces-dropdown" style="display: none; position: absolute; top: 100%; left: 0; background: #fcf9f5b3; box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 10px 0; border-radius: 6px; z-index: 1001; min-width: 240px;">
+          <a href="#" onclick="scrollToSection('minimal-surfaces')" style="display: block; padding: 6px 20px; color: #4c4c4c; text-decoration: none;">Minimal surfaces in \(\mathbb{R}^3\)</a>
+          <a href="#" onclick="scrollToSection('cmc-s3')" style="display: block; padding: 6px 20px; color: #4c4c4c; text-decoration: none;">CMC \(1\) surfaces in \( \mathbb{S}^3 \)</a>
+          <a href="#" onclick="scrollToSection('cmc-h3')" style="display: block; padding: 6px 20px; color: #4c4c4c; text-decoration: none;">CMC \(1\) surfaces in \( \mathbb{H}^3 \)</a>
         </div>
       </div>
       <a href="#" id="nav-about" onclick="showSection('about')" class="nav-link">About</a>
-      <a href="#" id="nav-contact" onclick="showSection('contact')" class="nav-link">Contact</a>
     </nav>
   </header>
   <div style="height: 60px;"></div>
@@ -176,19 +172,19 @@
 
   <!-- About Section -->
   <div id="about-section" style="display: none; padding-top: 60px;">
-    <div style="max-width: 800px; margin: 0 auto; padding: 0 20px 20px; font-size: 1rem; line-height: 1.6; color: #40342e;">
+    <div style="max-width: 800px; margin: 0 auto; padding: 0 20px 20px; font-size: 1rem; line-height: 1.6; color: #4c4c4c;">
+      <h2 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 1rem;">What is included?</h2>
       <p>This website serves as a repository for the surfaces I have created to date.</p>
-      <p>If you find it troublesome to generate surfaces yourself, or are simply interested in exploring them without creating your own, this site is ideal for you.</p>
+      <p>If you find it troublesome to generate surfaces yourself, or are simply interested in exploring them without creating your own, this site is ideal for you!</p>
       <p>You can browse through the available surfaces and click “View in 3D” to launch the interactive viewer.</p>
       <p>For every surface presented here, the source data is also available via GitHub.<br>
       You will find thumbnail <code>.jpg</code> images, <code>.obj</code> and <code>.mtl</code> files for the 3D viewer, and when available, accompanying Mathematica files.</p>
       <p>The Mathematica files are expected to be compatible with version 12.2.0.0 or later.</p>
-    </div>
-  </div>
 
-  <!-- Contact Section -->
-  <div id="contact-section" style="display: none; padding: 60px 20px; text-align: center;">
-    This is a page for Contact.
+      <h2 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-top: 2rem; margin-bottom: 1rem;">Contact</h2>
+      <p>As someone interested in differential geometry (you can reach me at mhara[at]gmail.com), I have so far only created relatively simple examples—mostly related to CMC surfaces in space forms.</p>
+      <p>Well-known surfaces that are not yet included on this site may be added along with their data if I get the opportunity to create them in the future.</p>
+    </div>
   </div>
 
   <!-- JavaScript to handle section toggling and dropdown behavior -->
@@ -211,8 +207,8 @@
     });
 
     function showSection(target) {
-      const sections = ['geometry', 'surfaces', 'about', 'contact'];
-      const navs = ['nav-geometry', 'nav-surfaces', 'nav-about', 'nav-contact'];
+      const sections = ['geometry', 'surfaces', 'about'];
+      const navs = ['nav-geometry', 'nav-surfaces', 'nav-about'];
       sections.forEach(id => {
         const el = document.getElementById(id + '-section');
         if (el) el.style.display = (id === target) ? 'block' : 'none';
@@ -251,7 +247,7 @@
   <!-- Footer with credit -->
   <footer>
     <div style="margin-bottom: 8px;">
-      Created by <a href="https://sites.google.com/view/m-hara/home-en" target="_blank" style="color: #946846; text-decoration: none; font-weight: bold;">Masaya Hara</a>
+      Created by <a href="https://sites.google.com/view/m-hara/home-en" target="_blank" style="color: #00796b; text-decoration: none; font-weight: bold;">Masaya Hara</a>
     </div>
     &copy; 2025 Masaya Hara – Gallery of Surfaces
   </footer>
