@@ -1,47 +1,77 @@
+/* === style.css === */
 body {
   margin: 0;
   overflow: hidden;
-  background-color: #000000;
-  /* color: rgb(93, 170, 97); */
-  /* color: rgb(209, 122, 122); */
-  color: rgb(196, 196, 196);
-  font-family: sans-serif;
+  background-color: #FFF8F8;
+  font-family: 'Rounded Mplus 1c', sans-serif;
+  color: #493759;
 }
-canvas { display: block; }
+
+canvas {
+  display: block;
+}
 
 header {
+  position: absolute;
+  top: 20px;
+  width: 100%;
   text-align: center;
-  font-size: 2rem;
-  margin: 50px 0 0 0;
-  font-family: 'Rounded Mplus 1c', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #A59ACA;
+  text-shadow: 0 0 6px rgba(165, 154, 202, 0.5);
+  z-index: 20;
 }
 
 #loading, #error {
   position: absolute;
   top: 20px;
-  padding: 10px;
-  border-radius: 5px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.7);
+  color: #493759;
+  font-size: 1rem;
+  box-shadow: 0 0 10px rgba(150, 100, 150, 0.2);
   z-index: 10;
-  background: rgba(0,0,0,0.7);
 }
 #loading { left: 20px; }
-#error   { right: 20px; color: red; display: none; }
+#error { right: 20px; color: #b54434; display: none; }
+
+button {
+  font-size: 1rem;
+  background-color: #C3D825;
+  color: #ffffff;
+  border: none;
+  padding: 10px 18px;
+  margin: 5px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+button:hover,
+button.active:hover {
+  background-color: #A0D8EF;
+  box-shadow: 0 0 12px rgba(160, 216, 239, 0.6);
+}
+
+button.active {
+  background-color: #A59ACA;
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(165, 154, 202, 0.8);
+}
 
 #toggleAxes, #toggleEdges {
   position: absolute;
   bottom: 20px;
-  left: 20px;
   z-index: 10;
-  padding: 10px 14px;
-  background: rgba(255,255,255,0.1);
-  color: #cacaca;
-  border: 1px solid #cacaca;
-  border-radius: 5px;
-  font-size: 1rem;
-  cursor: pointer;
+}
+#toggleAxes {
+  left: 20px;
 }
 #toggleEdges {
-  left: 150px; /* shift right so buttons don't overlap */
+  left: 160px;
 }
 
 #opacityLabel, #opacitySlider {
@@ -49,16 +79,15 @@ header {
   left: 20px;
   z-index: 10;
   font-size: 1rem;
-  color: #cacaca;
+  color: #493759;
   user-select: none;
 }
 #opacityLabel {
-  pointer-events: none;
-  bottom: 80px;  /* above the buttons */
-  display: block;
-  margin-bottom: 5px;
+  bottom: 90px;
+  margin-bottom: 4px;
 }
 #opacitySlider {
-  bottom: 70px;  /* above the buttons */
-  width: 150px;
+  bottom: 70px;
+  width: 160px;
+  accent-color: #A59ACA;
 }
