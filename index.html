@@ -12,8 +12,6 @@
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
 
   <style>
-    /* ====== Global layout and fonts ====== */
-        /* Basic page layout */
     body {
       margin: 0;
       font-family: 'Work Sans', sans-serif;
@@ -21,7 +19,6 @@
       color: #222;
     }
 
-        /* Top hero section: title and subtitle */
     .hero {
       padding: 80px 20px 20px;
       text-align: center;
@@ -37,24 +34,30 @@
       margin-top: 1rem;
     }
 
-        /* Section heading before each surface category */
+    .section-heading-wrapper {
+      padding: 0 5px;
+    }
+
     .section-heading {
       font-family: 'Playfair Display', serif;
       font-size: 1.8rem;
       margin: 30px 20px 10px;
       color: #444;
-      cursor: pointer; /* makes heading look clickable */
+      cursor: pointer;
+    }
+    .section-heading.active {
+      background-color: #f0e8dd;
+      padding: 10px 20px;
+      border-radius: 8px;
     }
 
-        /* Container for multiple surface cards (cells) */
     .illustration-list {
       display: flex;
       flex-direction: column;
       gap: 30px;
-      padding: 0 20px;
+      padding: 0 5px;
     }
 
-        /* One surface card (image + description + links) */
     .illustration-item {
       display: flex;
       align-items: center;
@@ -66,7 +69,6 @@
       margin-bottom: 20px;
     }
 
-        /* Image inside a cell: fixed size, cropped if needed */
     .illustration-item img {
       width: 200px;
       height: 200px;
@@ -74,20 +76,17 @@
       border-radius: 8px;
     }
 
-        /* Title of the surface */
     .illustration-info h3 {
       margin: 0 0 8px;
       font-family: 'Playfair Display', serif;
       font-size: 1.3rem;
     }
 
-        /* Description text under the title */
     .illustration-info p {
       margin: 0 0 10px;
       color: #555;
     }
 
-        /* Button style for "View in 3D" and "Download file" */
     .view-link {
       font-weight: bold;
       text-decoration: none;
@@ -103,7 +102,6 @@
       color: #fff;
     }
 
-        /* Footer section at the bottom */
     footer {
       text-align: center;
       font-size: 0.8rem;
@@ -113,42 +111,89 @@
   </style>
 </head>
 <body>
+  <!-- Sidebar toggle button -->
+  <button onclick="toggleSidebar()" style="position: fixed; top: 20px; left: 20px; z-index: 1001; background-color: #946846; color: white; border: none; padding: 10px 14px; border-radius: 6px; cursor: pointer; font-size: 0.9rem;">☰</button>
+  <aside id="sidebar" style="position: fixed; top: 60px; left: 0; width: 250px; height: 100vh; background-color: rgba(241, 238, 233, 0.7); padding: 20px; box-shadow: 2px 0 8px rgba(0,0,0,0.1); z-index: 999; overflow-y: auto; transform: translateX(-100%); transition: transform 0.3s ease;">
+    <h2 style="font-size: 1.2rem; font-family: 'Playfair Display', serif; color: #333;">Contents</h2>
+    <ul style="list-style: none; padding-left: 0; font-size: 0.95rem;">
+      <li style="margin: 12px 0;"><a href="#" onclick="scrollToSection('minimal-surfaces')" style="color: #946846; text-decoration: none;">Minimal surfaces in \( \mathbb{R}^3 \)</a></li>
+      <li style="margin: 12px 0;"><a href="#" onclick="scrollToSection('cmc-s3')" style="color: #946846; text-decoration: none;">CMC \(1\) surfaces in \( \mathbb{S}^3 \)</a></li>
+      <li style="margin: 12px 0;"><a href="#" onclick="scrollToSection('cmc-h3')" style="color: #946846; text-decoration: none;">CMC \(1\) surfaces in \( \mathbb{H}^3 \)</a></li>
+    </ul>
+  </aside>
+
   <div class="hero">
     <h1>Gallery of Surfaces</h1>
     <p>Explore geometric surfaces interactively in 3D space</p>
   </div>
 
+  <!-- Introductory description block -->
+  <div style="max-width: 800px; margin: 0 auto; padding: 0 20px 20px; font-size: 1rem; line-height: 1.6; color: #444;">
+    <p>This website serves as a repository for the surfaces I have created to date.</p>
+    <p>If you find it troublesome to generate surfaces yourself, or are simply interested in exploring them without creating your own, this site is ideal for you.</p>
+    <p>You can browse through the available surfaces and click “View in 3D” to launch the interactive viewer.</p>
+    <p>For every surface presented here, the source data is also available via GitHub.<br>
+    You will find thumbnail <code>.jpg</code> images, <code>.obj</code> and <code>.mtl</code> files for the 3D viewer, and when available, accompanying Mathematica files.</p>
+    <p>The Mathematica files are expected to be compatible with version 12.2.0.0 or later.</p>
+  </div>
+
   <!-- Toggle heading for minimal surfaces -->
-  <div class="section-heading" onclick="toggleSection('minimal-surfaces')">
-    Minimal surfaces in \( \mathbb{R}^3 \)
+  <div class="section-heading-wrapper">
+    <div class="section-heading" onclick="toggleSection(this, 'minimal-surfaces')">
+      Minimal surfaces in \( \mathbb{R}^3 \)
+    </div>
   </div>
   <div id="minimal-surfaces" style="display: none;"></div>
 
-  <script>
-  // ====== Toggle visibility of a section by ID ======
-  function toggleSection(id) {
-    const section = document.getElementById(id);
-    section.style.display = (section.style.display === 'none') ? 'block' : 'none';
-  }
+  <!-- Toggle heading for CMC in S^3 -->
+  <div class="section-heading-wrapper">
+    <div class="section-heading" onclick="toggleSection(this, 'cmc-s3')">
+      CMC \(1\) surfaces in \( \mathbb{S}^3 \)
+    </div>
+  </div>
+  <div id="cmc-s3" style="display: none;"></div>
 
-  // ====== Load surface cells dynamically from external HTML files ======
-      // Load Scherk's surface cell
-  fetch('includes/scherk.html')
+  <!-- Toggle heading for CMC in H^3 -->
+  <div class="section-heading-wrapper">
+    <div class="section-heading" onclick="toggleSection(this, 'cmc-h3')">
+      CMC \(1\) surfaces in \( \mathbb{H}^3 \)
+    </div>
+  </div>
+  <div id="cmc-h3" style="display: none;"></div>
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const isOpen = sidebar.style.transform === 'translateX(0px)';
+      sidebar.style.transform = isOpen ? 'translateX(-100%)' : 'translateX(0)';
+    }
+
+    function scrollToSection(id) {
+      const section = document.getElementById(id);
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    function toggleSection(headingEl, id) {
+      const section = document.getElementById(id);
+      const isVisible = section.style.display === 'block';
+      section.style.display = isVisible ? 'none' : 'block';
+      headingEl.classList.toggle('active', !isVisible);
+    }
+
+    fetch('includes/scherk.html')
       .then(res => res.text())
       .then(html => {
         document.getElementById('minimal-surfaces').innerHTML += html;
       });
 
-      // Load Enneper surface cell
-  fetch('includes/enneper.html')
+    fetch('includes/enneper.html')
       .then(res => res.text())
       .then(html => {
         document.getElementById('minimal-surfaces').innerHTML += html;
       });
   </script>
-
-  <div class="section-heading">CMC \(1\) surfaces in \( \mathbb{S}^3 \)</div>
-  <div class="section-heading">CMC \(1\) surfaces in \( \mathbb{H}^3 \)</div>
 
   <footer>
     <div style="margin-bottom: 8px;">
