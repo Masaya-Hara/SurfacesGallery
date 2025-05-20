@@ -7,7 +7,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Work+Sans&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
 
-<style>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+
+    /* Wrapper to control content height for sticky footer */
+    .content-wrapper {
+      min-height: calc(100vh - 120px); /* Viewport height minus footer height */
+      padding-bottom: 40px; /* Avoid overlap with footer */
+    }
+
     .section-heading-wrapper {
       padding: 0 15px;
     }
@@ -17,16 +28,18 @@
       gap: 30px;
       padding: 0 15px;
     }
+    #minimal-r3, #cmc-s3, #cmc-h3 {
+      padding: 0 35px; /* 左右20pxの余白 */
+    }
     #nav-surfaces {
       line-height: 1.6;
       display: inline-flex;
       align-items: center;
     }
     body {
-      margin: 0;
       font-family: 'Work Sans', sans-serif;
-      background-color: #f1f1f1; /* soft pink */
-      color: #4c4c4c; /* keep text black */
+      background-color: #f1f1f1;
+      color: #4c4c4c;
     }
     .hero {
       padding: 80px 20px 20px;
@@ -48,17 +61,17 @@
       margin: 30px 20px 10px;
       color: #4c4c4c;
       cursor: pointer;
+      padding: 10px 20px;
+      border-radius: 8px;
     }
     .section-heading.active {
       background-color: #dfdfdf;
-      padding: 10px 20px;
-      border-radius: 8px;
     }
     .illustration-item {
       display: flex;
       align-items: center;
       gap: 20px;
-      background-color: #e0f2f1; /* light blue */
+      background-color: #e59696;
       padding: 20px;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.05);
@@ -82,7 +95,7 @@
     .view-link {
       font-weight: bold;
       text-decoration: none;
-      color: #4c4c4c; /* accent from blue-green */
+      color: #4c4c4c;
       border: 1px solid #4c4c4c;
       padding: 6px 12px;
       border-radius: 6px;
@@ -98,20 +111,37 @@
       padding: 6px 10px;
       border-radius: 6px;
     }
+    #nav-others span, #nav-about span {
+      display: inline-block;
+      position: relative;
+      top: 2px;
+    }
     .nav-link.active {
-      background-color: #dfdfdf; /* pale green */
+      background-color: #dfdfdf;
       font-weight: 700;
+    }
+    .fade-in {
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeIn 1.0s ease forwards;
+    }
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
     footer {
       text-align: center;
       font-size: 0.8rem;
       color: #4c4c4c;
       padding: 40px 0;
+      background-color: #fcf9f5;
     }
     #surfaces-dropdown a:hover {
-      background-color: #dfdfdf; /* hover from light blue #f35506 */
+      background-color: #dfdfdf;
     }
-    #geometry-section {
+    #others-section {
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -119,73 +149,122 @@
       padding: 60px 20px;
       text-align: center;
     }
+    .section-heading .caret {
+      display: inline-block;
+      transition: transform 0.3s ease;
+      margin-right: 6px;
+    }
+    .section-heading.active .caret {
+      transform: rotate(90deg);
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem;
+      font-weight: 600;
+      margin: 30px 20px 10px;
+      color: #4c4c4c;
+      margin-left: 5px;
+      padding: 0;
+      line-height: 1.2;
+    }
   </style>
 </head>
 <body>
-  <!-- Fixed navigation header -->
-  <header style="position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #fcf9f5; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #e0ddd7; z-index: 1000;">
-    <nav style="display: flex; gap: 40px; font-size: 0.95rem; font-weight: 500; font-family: 'Work Sans', sans-serif;">
-      <a href="#" id="nav-geometry" onclick="showSection('geometry')" class="nav-link">Geometry</a>
-      <div style="position: relative;">
-        <a href="#" id="nav-surfaces" onclick="showSection('surfaces')" class="nav-link">
-          <span style="display: inline-flex; align-items: center; gap: 4px;">
-            Surfaces<span style="display:inline-block; width: 8px;"></span><span id="surfaces-caret" style="display: inline-block; transition: transform 0.3s ease;">▸</span>
-          </span>
-        </a>
-        <div id="surfaces-dropdown" style="display: none; position: absolute; top: 100%; left: 0; background: #fcf9f5b3; box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 10px 0; border-radius: 6px; z-index: 1001; min-width: 240px;">
-          <a href="#" onclick="scrollToSection('minimal-surfaces')" style="display: block; padding: 6px 20px; color: #4c4c4c; text-decoration: none;">Minimal surfaces in \(\mathbb{R}^3\)</a>
-          <a href="#" onclick="scrollToSection('cmc-s3')" style="display: block; padding: 6px 20px; color: #4c4c4c; text-decoration: none;">CMC \(1\) surfaces in \( \mathbb{S}^3 \)</a>
-          <a href="#" onclick="scrollToSection('cmc-h3')" style="display: block; padding: 6px 20px; color: #4c4c4c; text-decoration: none;">CMC \(1\) surfaces in \( \mathbb{H}^3 \)</a>
+  <div class="content-wrapper"><!-- Begin content wrapper -->
+
+    <!-- Fixed navigation header -->
+    <header style="position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #fcf9f5; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #e0ddd7; z-index: 1000;">
+      <nav style="display: flex; gap: 40px; font-size: 0.95rem; font-weight: 500; font-family: 'Work Sans', sans-serif;">
+        <div style="position: relative;">
+          <a href="#" id="nav-surfaces" onclick="showSection('surfaces')" class="nav-link">
+            <span style="display: inline-flex; align-items: center; gap: 4px;">
+              Surfaces<span style="display:inline-block; width: 8px;"></span><span id="surfaces-caret" style="display: inline-block; transition: transform 0.3s ease;">▸</span>
+            </span>
+          </a>
+          <div id="surfaces-dropdown" style="display: none; position: absolute; top: 100%; left: 0; background: #fcf9f5b3; box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 10px 0; border-radius: 6px; z-index: 1001; min-width: 240px;">
+            <a href="#" onclick="scrollToSection('minimal-r3')" style="display: block; padding: 6px 20px; color: #4c4c4c; text-decoration: none;">Minimal surfaces in \(\mathbb{R}^3\)</a>
+            <a href="#" onclick="scrollToSection('cmc-s3')" style="display: block; padding: 6px 20px; color: #4c4c4c; text-decoration: none;">CMC \(1\) surfaces in \( \mathbb{S}^3 \)</a>
+            <a href="#" onclick="scrollToSection('cmc-h3')" style="display: block; padding: 6px 20px; color: #4c4c4c; text-decoration: none;">CMC \(1\) surfaces in \( \mathbb{H}^3 \)</a>
+          </div>
+        </div>
+        <a href="#" id="nav-others" onclick="showSection('others')" class="nav-link"><span>Others</span></a>
+        <a href="#" id="nav-about" onclick="showSection('about')" class="nav-link"><span>About</span></a>
+      </nav>
+    </header>
+    <div style="height: 60px;"></div>
+
+    <!-- Others Section -->
+    <div id="others-section">
+      <div>This is a page for others.</div>
+    </div>
+
+    <!-- Surfaces Section -->
+    <div id="surfaces-section" style="display: none;">
+      <!-- R3 -->
+      <div class="section-heading-wrapper">
+        <div class="section-title">
+          \( \bigcirc \) Surfaces in \( \mathbb{R}^3 \)
         </div>
       </div>
-      <a href="#" id="nav-about" onclick="showSection('about')" class="nav-link">About</a>
-    </nav>
-  </header>
-  <div style="height: 60px;"></div>
+      <div class="section-heading-wrapper">
+        <div class="section-heading" onclick="toggleSection(this, 'minimal-r3')">
+          <span class="caret">▸</span>Minimal surfaces in \( \mathbb{R}^3 \)
+        </div>
+      </div>
+      <div id="minimal-r3" style="display: none; transition: all 0.4s ease;"></div>
 
-  <!-- Geometry Section -->
-  <div id="geometry-section">
-    <div>This is a page for Geometry.</div>
-  </div>
+      <!-- S3 -->
+      <div class="section-heading-wrapper">
+        <div class="section-title">
+          \( \bigcirc \) Surfaces in \( \mathbb{S}^3 \)
+        </div>
+      </div>
+      <div class="section-heading-wrapper">
+        <div class="section-heading" onclick="toggleSection(this, 'cmc-s3')">
+          <span class="caret">▸</span>CMC \(1\) surfaces in \( \mathbb{S}^3 \)
+        </div>
+      </div>
+      <div id="cmc-s3" style="display: none; transition: all 0.4s ease;"></div>
 
-  <!-- Surfaces Section -->
-  <div id="surfaces-section" style="display: none;">
-    <div class="section-heading-wrapper">
-      <div class="section-heading" onclick="toggleSection(this, 'minimal-surfaces')">
-        Minimal surfaces in \( \mathbb{R}^3 \)
+      <!-- H3 -->
+      <div class="section-heading-wrapper">
+        <div class="section-title">
+          \( \bigcirc \) Surfaces in \( \mathbb{H}^3 \)
+        </div>
+      </div>
+      <div class="section-heading-wrapper">
+        <div class="section-heading" onclick="toggleSection(this, 'cmc-h3')">
+          <span class="caret">▸</span>CMC \(1\) surfaces in \( \mathbb{H}^3 \)
+        </div>
+      </div>
+      <div id="cmc-h3" style="display: none; transition: all 0.4s ease;"></div>
+    </div>
+
+    <!-- About Section -->
+    <div id="about-section" style="display: none; padding-top: 60px;">
+      <div style="max-width: 800px; margin: 0 auto; padding: 0 20px 20px; font-size: 1rem; line-height: 1.6; color: #4c4c4c;">
+        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 1rem;">What is included?</h2>
+        <p>This website serves as a repository for the surfaces I have created to date.</p>
+        <p>If you find it troublesome to generate surfaces yourself, or are simply interested in exploring them without creating your own, this site is ideal for you!</p>
+        <p>You can browse through the available surfaces and click “View in 3D” to launch the interactive viewer.</p>
+        <p>For every surface presented here, the source data is also available via GitHub.<br>
+        You will find thumbnail <code>.jpg</code> images, <code>.obj</code> and <code>.mtl</code> files for the 3D viewer, and when available, accompanying Mathematica files.</p>
+        <p>The Mathematica files are expected to be compatible with version 12.2.0.0 or later.</p>
+
+        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-top: 2rem; margin-bottom: 1rem;">Contact</h2>
+        <p>As someone interested in differential geometry (you can reach me at mhara[at]gmail.com), I have so far only created relatively simple examples—mostly related to CMC surfaces in space forms.</p>
+        <p>Well-known surfaces that are not yet included on this site may be added along with their data if I get the opportunity to create them in the future.</p>
       </div>
     </div>
-    <div id="minimal-surfaces" style="display: none; transition: all 0.4s ease;"></div>
-    <div class="section-heading-wrapper">
-      <div class="section-heading" onclick="toggleSection(this, 'cmc-s3')">
-        CMC \(1\) surfaces in \( \mathbb{S}^3 \)
-      </div>
-    </div>
-    <div id="cmc-s3" style="display: none; transition: all 0.4s ease;"></div>
-    <div class="section-heading-wrapper">
-      <div class="section-heading" onclick="toggleSection(this, 'cmc-h3')">
-        CMC \(1\) surfaces in \( \mathbb{H}^3 \)
-      </div>
-    </div>
-    <div id="cmc-h3" style="display: none; transition: all 0.4s ease;"></div>
-  </div>
+  </div><!-- End content wrapper -->
 
-  <!-- About Section -->
-  <div id="about-section" style="display: none; padding-top: 60px;">
-    <div style="max-width: 800px; margin: 0 auto; padding: 0 20px 20px; font-size: 1rem; line-height: 1.6; color: #4c4c4c;">
-      <h2 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 1rem;">What is included?</h2>
-      <p>This website serves as a repository for the surfaces I have created to date.</p>
-      <p>If you find it troublesome to generate surfaces yourself, or are simply interested in exploring them without creating your own, this site is ideal for you!</p>
-      <p>You can browse through the available surfaces and click “View in 3D” to launch the interactive viewer.</p>
-      <p>For every surface presented here, the source data is also available via GitHub.<br>
-      You will find thumbnail <code>.jpg</code> images, <code>.obj</code> and <code>.mtl</code> files for the 3D viewer, and when available, accompanying Mathematica files.</p>
-      <p>The Mathematica files are expected to be compatible with version 12.2.0.0 or later.</p>
-
-      <h2 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-top: 2rem; margin-bottom: 1rem;">Contact</h2>
-      <p>As someone interested in differential geometry (you can reach me at mhara[at]gmail.com), I have so far only created relatively simple examples—mostly related to CMC surfaces in space forms.</p>
-      <p>Well-known surfaces that are not yet included on this site may be added along with their data if I get the opportunity to create them in the future.</p>
+  <!-- Footer with credit -->
+  <footer>
+    <div style="margin-bottom: 8px;">
+      Created by <a href="https://sites.google.com/view/m-hara/home-en" target="_blank" style="color: #00796b; text-decoration: none; font-weight: bold;">Masaya Hara</a>
     </div>
-  </div>
+    &copy; 2025 Masaya Hara – Gallery of Surfaces
+  </footer>
 
   <!-- JavaScript to handle section toggling and dropdown behavior -->
   <script>
@@ -194,7 +273,6 @@
       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    // Show dropdown menu on hover
     const navSurfaces = document.getElementById('nav-surfaces');
     const dropdown = document.getElementById('surfaces-dropdown');
     navSurfaces.parentElement.addEventListener('mouseenter', () => {
@@ -207,8 +285,8 @@
     });
 
     function showSection(target) {
-      const sections = ['geometry', 'surfaces', 'about'];
-      const navs = ['nav-geometry', 'nav-surfaces', 'nav-about'];
+      const sections = ['others', 'surfaces', 'about'];
+      const navs = ['nav-others', 'nav-surfaces', 'nav-about'];
       sections.forEach(id => {
         const el = document.getElementById(id + '-section');
         if (el) el.style.display = (id === target) ? 'block' : 'none';
@@ -220,36 +298,145 @@
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-      showSection('geometry');
+      showSection('others');
     });
 
     function toggleSection(headingEl, id) {
       const section = document.getElementById(id);
-      const isVisible = section.style.display === 'block';
-      section.style.display = isVisible ? 'none' : 'block';
-      headingEl.classList.toggle('active', !isVisible);
+      const isOpen = section.classList.contains('open');
+      headingEl.classList.toggle('active', !isOpen);
+
+      // Reset transition state
+      section.style.transition = 'max-height 0.8s ease';
+      section.style.overflow = 'hidden';
+      section.style.position = 'relative';
+      section.style.zIndex = '0';
+
+      if (!isOpen) {
+        section.classList.add('open');
+        section.style.display = 'block';
+        section.style.maxHeight = '0px';
+
+        // Force reflow
+        void section.offsetHeight;
+
+        section.style.maxHeight = section.scrollHeight + 'px';
+
+        section.addEventListener('transitionend', function handleOpen(e) {
+          if (e.propertyName !== 'max-height') return;
+          section.style.maxHeight = 'none'; // Allow natural expansion after transition
+          section.style.overflow = 'visible';
+          section.removeEventListener('transitionend', handleOpen);
+        });
+      } else {
+        section.style.maxHeight = section.scrollHeight + 'px';
+
+        // Force reflow
+        void section.offsetHeight;
+
+        section.style.maxHeight = '0px';
+
+        section.addEventListener('transitionend', function handleClose(e) {
+          if (e.propertyName !== 'max-height') return;
+          section.classList.remove('open');
+          section.style.display = 'none';
+          section.style.overflow = 'visible';
+          section.style.maxHeight = 'none';
+          section.removeEventListener('transitionend', handleClose);
+        });
+      }
     }
 
-    // Load surface entries dynamically from external HTML files
     fetch('includes/scherk.html')
       .then(res => res.text())
       .then(html => {
-        document.getElementById('minimal-surfaces').innerHTML += html;
+        const container = document.getElementById('minimal-r3');
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('fade-in');
+        wrapper.innerHTML = html;
+        container.appendChild(wrapper);
       });
-
     fetch('includes/enneper.html')
       .then(res => res.text())
       .then(html => {
-        document.getElementById('minimal-surfaces').innerHTML += html;
+        const container = document.getElementById('minimal-r3');
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('fade-in');
+        wrapper.innerHTML = html;
+        container.appendChild(wrapper);
+      });
+    fetch('includes/scherk.html')
+      .then(res => res.text())
+      .then(html => {
+        const container = document.getElementById('minimal-r3');
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('fade-in');
+        wrapper.innerHTML = html;
+        container.appendChild(wrapper);
+      });
+    fetch('includes/enneper.html')
+      .then(res => res.text())
+      .then(html => {
+        const container = document.getElementById('cmc-s3');
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('fade-in');
+        wrapper.innerHTML = html;
+        container.appendChild(wrapper);
+      });
+    fetch('includes/scherk.html')
+      .then(res => res.text())
+      .then(html => {
+        const container = document.getElementById('cmc-s3');
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('fade-in');
+        wrapper.innerHTML = html;
+        container.appendChild(wrapper);
+      });
+    fetch('includes/enneper.html')
+      .then(res => res.text())
+      .then(html => {
+        const container = document.getElementById('cmc-s3');
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('fade-in');
+        wrapper.innerHTML = html;
+        container.appendChild(wrapper);
+      });
+    fetch('includes/scherk.html')
+      .then(res => res.text())
+      .then(html => {
+        const container = document.getElementById('cmc-s3');
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('fade-in');
+        wrapper.innerHTML = html;
+        container.appendChild(wrapper);
+      });
+    fetch('includes/enneper.html')
+      .then(res => res.text())
+      .then(html => {
+        const container = document.getElementById('cmc-h3');
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('fade-in');
+        wrapper.innerHTML = html;
+        container.appendChild(wrapper);
+      });
+    fetch('includes/scherk.html')
+      .then(res => res.text())
+      .then(html => {
+        const container = document.getElementById('cmc-h3');
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('fade-in');
+        wrapper.innerHTML = html;
+        container.appendChild(wrapper);
+      });
+    fetch('includes/enneper.html')
+      .then(res => res.text())
+      .then(html => {
+        const container = document.getElementById('cmc-h3');
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('fade-in');
+        wrapper.innerHTML = html;
+        container.appendChild(wrapper);
       });
   </script>
-
-  <!-- Footer with credit -->
-  <footer>
-    <div style="margin-bottom: 8px;">
-      Created by <a href="https://sites.google.com/view/m-hara/home-en" target="_blank" style="color: #00796b; text-decoration: none; font-weight: bold;">Masaya Hara</a>
-    </div>
-    &copy; 2025 Masaya Hara – Gallery of Surfaces
-  </footer>
 </body>
 </html>
