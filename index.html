@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery of Surfaces</title>
+
+  <!-- Google Fonts for stylish serif look -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Work+Sans&display=swap" rel="stylesheet">
+
+  <!-- MathJax for LaTeX rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+
+  <style>
+    /* ====== Global layout and fonts ====== */
+        /* Basic page layout */
+    body {
+      margin: 0;
+      font-family: 'Work Sans', sans-serif;
+      background-color: #f9f8f4;
+      color: #222;
+    }
+
+        /* Top hero section: title and subtitle */
+    .hero {
+      padding: 80px 20px 20px;
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+    }
+    .hero h1 {
+      font-size: 3rem;
+      margin: 0;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      color: #555;
+      margin-top: 1rem;
+    }
+
+        /* Section heading before each surface category */
+    .section-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      margin: 30px 20px 10px;
+      color: #444;
+      cursor: pointer; /* makes heading look clickable */
+    }
+
+        /* Container for multiple surface cards (cells) */
+    .illustration-list {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      padding: 0 20px;
+    }
+
+        /* One surface card (image + description + links) */
+    .illustration-item {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      margin-bottom: 20px;
+    }
+
+        /* Image inside a cell: fixed size, cropped if needed */
+    .illustration-item img {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+        /* Title of the surface */
+    .illustration-info h3 {
+      margin: 0 0 8px;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+    }
+
+        /* Description text under the title */
+    .illustration-info p {
+      margin: 0 0 10px;
+      color: #555;
+    }
+
+        /* Button style for "View in 3D" and "Download file" */
+    .view-link {
+      font-weight: bold;
+      text-decoration: none;
+      color: #946846;
+      border: 1px solid #946846;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: 0.2s;
+    }
+
+    .view-link:hover {
+      background-color: #946846;
+      color: #fff;
+    }
+
+        /* Footer section at the bottom */
+    footer {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #999;
+      padding: 40px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <h1>Gallery of Surfaces</h1>
+    <p>Explore geometric surfaces interactively in 3D space</p>
+  </div>
+
+  <!-- Toggle heading for minimal surfaces -->
+  <div class="section-heading" onclick="toggleSection('minimal-surfaces')">
+    Minimal surfaces in \( \mathbb{R}^3 \)
+  </div>
+  <div id="minimal-surfaces" style="display: none;"></div>
+
+  <script>
+  // ====== Toggle visibility of a section by ID ======
+  function toggleSection(id) {
+    const section = document.getElementById(id);
+    section.style.display = (section.style.display === 'none') ? 'block' : 'none';
+  }
+
+  // ====== Load surface cells dynamically from external HTML files ======
+      // Load Scherk's surface cell
+  fetch('includes/scherk.html')
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById('minimal-surfaces').innerHTML += html;
+      });
+
+      // Load Enneper surface cell
+  fetch('includes/enneper.html')
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById('minimal-surfaces').innerHTML += html;
+      });
+  </script>
+
+  <div class="section-heading">CMC \(1\) surfaces in \( \mathbb{S}^3 \)</div>
+  <div class="section-heading">CMC \(1\) surfaces in \( \mathbb{H}^3 \)</div>
+
+  <footer>
+    <div style="margin-bottom: 8px;">
+      Created by <a href="https://sites.google.com/view/m-hara/home-en" target="_blank" style="color: #946846; text-decoration: none; font-weight: bold;">Masaya Hara</a>
+    </div>
+    &copy; 2025 Masaya Hara – Gallery of Surfaces
+  </footer>
+</body>
+</html>

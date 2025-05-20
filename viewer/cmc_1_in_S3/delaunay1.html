@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Rounded+Mplus+1c&display=swap" rel="stylesheet">
 
   <!-- External stylesheet -->
-  <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="../../assets/styles/style.css" />
 
   <!-- Import map for Three.js -->
   <script type="importmap">
@@ -149,9 +149,9 @@
       location.reload();
     });
 
-    new MTLLoader().load('./discrete2.mtl', mats => {
+    new MTLLoader().load('../../assets/models/cmc_1_in_S3/discrete2.mtl', mats => {
       mats.preload();
-      new OBJLoader().setMaterials(mats).load('./discrete2.obj',
+      new OBJLoader().setMaterials(mats).load('../../assets/models/cmc_1_in_S3/discrete2.obj',
         obj => {
           obj.traverse(child => {
             if (!child.isMesh) return;

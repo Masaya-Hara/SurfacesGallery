@@ -91,7 +91,6 @@ button.active {
   text-align: center;
 }
 
-
 #moveLeftBtn, #moveRightBtn, #moveUpBtn, #moveDownBtn {
   position: absolute;
   width: 44px;
@@ -109,12 +108,13 @@ button.active {
 #moveLeftBtn { bottom: 74px; right: 128px; }
 #moveRightBtn { bottom: 74px; right: 20px; }
 #moveDownBtn { bottom: 20px; right: 74px; }
-#zoomInBtn { bottom: 74px; right: 182px; }
-#zoomOutBtn { bottom: 20px; right: 182px; }
+
+#zoomInBtn { bottom: 20px; right: 20px; }
+#zoomOutBtn { bottom: 20px; right: 128px; }
 
 #resetBtn {
-  bottom: 182px;
-  right: 20px;
+  bottom: 20px;
+  right: 182px;
   border-radius: 6px;
   width: auto;
   height: auto;
