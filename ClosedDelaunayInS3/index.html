@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>OBJ Viewer - Closed Delaunay in S³</title>
+  <title>OBJ Viewer - Closed Delaunay in ℘^3</title>
 
   <!-- MathJax for LaTeX rendering -->
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
@@ -26,16 +26,30 @@
 <body>
   <header>Closed Delaunay surface in \(\mathbb{S}^3\)</header>
 
+  <!-- Loading and error messages -->
   <div id="loading">Now loading OBJ model…</div>
   <div id="error" style="display:none;">Sorry, failed to load OBJ file.</div>
 
+  <!-- Axis and edge toggle buttons -->
   <button id="toggleAxes" class="controlBtn">Axes: OFF</button>
   <button id="toggleEdges" class="controlBtn">Edges: OFF</button>
 
+  <!-- Opacity slider and label -->
   <label id="opacityLabel">
     Opacity: <span id="opacityValue">1.00</span>
   </label>
   <input type="range" id="opacitySlider" min="0" max="1" step="0.01" value="1" />
+
+  <!-- Zoom and move buttons -->
+  <button id="zoomInBtn" class="controlBtn">&#65291;</button>
+  <button id="zoomOutBtn" class="controlBtn">&#65293;</button>
+  <button id="moveLeftBtn" class="controlBtn">←</button>
+  <button id="moveRightBtn" class="controlBtn">→</button>
+  <button id="moveUpBtn" class="controlBtn">↑</button>
+  <button id="moveDownBtn" class="controlBtn">↓</button>
+
+  <!-- Reset button -->
+  <button id="resetBtn" class="controlBtn">Reset</button>
 
   <script type="module">
     import * as THREE from 'three';
@@ -68,6 +82,13 @@
     const valueLabel = document.getElementById('opacityValue');
     const toggleAxesBtn = document.getElementById('toggleAxes');
     const toggleEdgesBtn = document.getElementById('toggleEdges');
+    const zoomInBtn = document.getElementById('zoomInBtn');
+    const zoomOutBtn = document.getElementById('zoomOutBtn');
+    const moveLeftBtn = document.getElementById('moveLeftBtn');
+    const moveRightBtn = document.getElementById('moveRightBtn');
+    const moveUpBtn = document.getElementById('moveUpBtn');
+    const moveDownBtn = document.getElementById('moveDownBtn');
+    const resetBtn = document.getElementById('resetBtn');
 
     let currentModel = null;
     let edgesVisible = false;
@@ -101,6 +122,33 @@
       toggleEdgesBtn.textContent = edgesVisible ? 'Edges: ON' : 'Edges: OFF';
     });
 
+    // Zoom buttons
+    zoomInBtn.addEventListener('click', () => {
+      if (currentModel) currentModel.scale.multiplyScalar(1.1);
+    });
+    zoomOutBtn.addEventListener('click', () => {
+      if (currentModel) currentModel.scale.multiplyScalar(0.9);
+    });
+
+    // Reversed pan controls
+    const moveDelta = 0.1;
+    moveLeftBtn.addEventListener('click', () => {
+      if (currentModel) currentModel.position.x += moveDelta;
+    });
+    moveRightBtn.addEventListener('click', () => {
+      if (currentModel) currentModel.position.x -= moveDelta;
+    });
+    moveUpBtn.addEventListener('click', () => {
+      if (currentModel) currentModel.position.y -= moveDelta;
+    });
+    moveDownBtn.addEventListener('click', () => {
+      if (currentModel) currentModel.position.y += moveDelta;
+    });
+
+    resetBtn.addEventListener('click', () => {
+      location.reload();
+    });
+
     new MTLLoader().load('./discrete2.mtl', mats => {
       mats.preload();
       new OBJLoader().setMaterials(mats).load('./discrete2.obj',
@@ -121,6 +169,7 @@
           });
 
           obj.scale.set(1, 1, 1);
+          obj.position.set(0, 0, 0);
           scene.add(obj);
           currentModel = obj;
           document.getElementById('loading').style.display = 'none';
