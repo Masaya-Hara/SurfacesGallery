@@ -1,24 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gallery of Surfaces</title>
-
-  <!-- Google Fonts for stylish serif look -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Work+Sans&display=swap" rel="stylesheet">
-
-  <!-- MathJax for LaTeX rendering -->
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
 
   <style>
+    /* Style for layout and typography */
+    .section-heading-wrapper {
+      padding: 0 15px;
+    }
+    .illustration-list {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      padding: 0 15px;
+    }
+    #nav-surfaces {
+      line-height: 1.6;
+      display: inline-flex;
+      align-items: center;
+    }
     body {
       margin: 0;
       font-family: 'Work Sans', sans-serif;
-      background-color: #f9f8f4;
-      color: #222;
+      background-color: #fcf9f5;
+      color: #40342e;
     }
-
     .hero {
       padding: 80px 20px 20px;
       text-align: center;
@@ -30,19 +40,14 @@
     }
     .hero p {
       font-size: 1.2rem;
-      color: #555;
+      color: #5a4c45;
       margin-top: 1rem;
     }
-
-    .section-heading-wrapper {
-      padding: 0 5px;
-    }
-
     .section-heading {
       font-family: 'Playfair Display', serif;
       font-size: 1.8rem;
       margin: 30px 20px 10px;
-      color: #444;
+      color: #40342e;
       cursor: pointer;
     }
     .section-heading.active {
@@ -50,130 +55,177 @@
       padding: 10px 20px;
       border-radius: 8px;
     }
-
-    .illustration-list {
-      display: flex;
-      flex-direction: column;
-      gap: 30px;
-      padding: 0 5px;
-    }
-
     .illustration-item {
       display: flex;
       align-items: center;
       gap: 20px;
-      background-color: #fff;
+      background-color: #f2ece6;
       padding: 20px;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.05);
       margin-bottom: 20px;
     }
-
     .illustration-item img {
       width: 200px;
       height: 200px;
       object-fit: cover;
       border-radius: 8px;
     }
-
     .illustration-info h3 {
       margin: 0 0 8px;
       font-family: 'Playfair Display', serif;
       font-size: 1.3rem;
     }
-
     .illustration-info p {
       margin: 0 0 10px;
       color: #555;
     }
-
     .view-link {
       font-weight: bold;
       text-decoration: none;
-      color: #946846;
-      border: 1px solid #946846;
+      color: #7a4e2b;
+      border: 1px solid #7a4e2b;
       padding: 6px 12px;
       border-radius: 6px;
       transition: 0.2s;
     }
-
     .view-link:hover {
-      background-color: #946846;
+      background-color: #7a4e2b;
       color: #fff;
     }
-
+    .nav-link {
+      color: #7a4e2b;
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+    }
+    .nav-link.active {
+      background-color: #e6dfd6;
+      font-weight: 700;
+    }
     footer {
       text-align: center;
       font-size: 0.8rem;
-      color: #999;
+      color: #8e8378;
       padding: 40px 0;
+    }
+    #surfaces-dropdown a:hover {
+      background-color: rgba(242, 236, 230, 0.7);
+    }
+
+    /* Center the Geometry section content vertically and horizontally */
+    #geometry-section {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 60px 20px;
+      text-align: center;
     }
   </style>
 </head>
 <body>
-  <!-- Sidebar toggle button -->
-  <button onclick="toggleSidebar()" style="position: fixed; top: 20px; left: 20px; z-index: 1001; background-color: #946846; color: white; border: none; padding: 10px 14px; border-radius: 6px; cursor: pointer; font-size: 0.9rem;">☰</button>
-  <aside id="sidebar" style="position: fixed; top: 60px; left: 0; width: 250px; height: 100vh; background-color: rgba(241, 238, 233, 0.7); padding: 20px; box-shadow: 2px 0 8px rgba(0,0,0,0.1); z-index: 999; overflow-y: auto; transform: translateX(-100%); transition: transform 0.3s ease;">
-    <h2 style="font-size: 1.2rem; font-family: 'Playfair Display', serif; color: #333;">Contents</h2>
-    <ul style="list-style: none; padding-left: 0; font-size: 0.95rem;">
-      <li style="margin: 12px 0;"><a href="#" onclick="scrollToSection('minimal-surfaces')" style="color: #946846; text-decoration: none;">Minimal surfaces in \( \mathbb{R}^3 \)</a></li>
-      <li style="margin: 12px 0;"><a href="#" onclick="scrollToSection('cmc-s3')" style="color: #946846; text-decoration: none;">CMC \(1\) surfaces in \( \mathbb{S}^3 \)</a></li>
-      <li style="margin: 12px 0;"><a href="#" onclick="scrollToSection('cmc-h3')" style="color: #946846; text-decoration: none;">CMC \(1\) surfaces in \( \mathbb{H}^3 \)</a></li>
-    </ul>
-  </aside>
+  <!-- Fixed navigation header -->
+  <header style="position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #fcf9f5; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #e0ddd7; z-index: 1000;">
+    <nav style="display: flex; gap: 40px; font-size: 0.95rem; font-weight: 500; font-family: 'Work Sans', sans-serif;">
+      <a href="#" id="nav-geometry" onclick="showSection('geometry')" class="nav-link">Geometry</a>
+      <div style="position: relative;">
+        <a href="#" id="nav-surfaces" onclick="showSection('surfaces')" class="nav-link">
+          <span style="display: inline-flex; align-items: center; gap: 4px;">
+            Surfaces<span style="display:inline-block; width: 8px;"></span><span id="surfaces-caret" style="display: inline-block; transition: transform 0.3s ease;">▸</span>
+          </span>
+        </a>
+        <div id="surfaces-dropdown" style="display: none; position: absolute; top: 100%; left: 0; background: rgba(252, 249, 245, 0.7); box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 10px 0; border-radius: 6px; z-index: 1001; min-width: 240px;">
+          <a href="#" onclick="scrollToSection('minimal-surfaces')" style="display: block; padding: 6px 20px; color: #7a4e2b; text-decoration: none;">Minimal surfaces in \(\mathbb{R}^3\)</a>
+          <a href="#" onclick="scrollToSection('cmc-s3')" style="display: block; padding: 6px 20px; color: #7a4e2b; text-decoration: none;">CMC \(1\) surfaces in \( \mathbb{S}^3 \)</a>
+          <a href="#" onclick="scrollToSection('cmc-h3')" style="display: block; padding: 6px 20px; color: #7a4e2b; text-decoration: none;">CMC \(1\) surfaces in \( \mathbb{H}^3 \)</a>
+        </div>
+      </div>
+      <a href="#" id="nav-about" onclick="showSection('about')" class="nav-link">About</a>
+      <a href="#" id="nav-contact" onclick="showSection('contact')" class="nav-link">Contact</a>
+    </nav>
+  </header>
+  <div style="height: 60px;"></div>
 
-  <div class="hero">
-    <h1>Gallery of Surfaces</h1>
-    <p>Explore geometric surfaces interactively in 3D space</p>
+  <!-- Geometry Section -->
+  <div id="geometry-section">
+    <div>This is a page for Geometry.</div>
   </div>
 
-  <!-- Introductory description block -->
-  <div style="max-width: 800px; margin: 0 auto; padding: 0 20px 20px; font-size: 1rem; line-height: 1.6; color: #444;">
-    <p>This website serves as a repository for the surfaces I have created to date.</p>
-    <p>If you find it troublesome to generate surfaces yourself, or are simply interested in exploring them without creating your own, this site is ideal for you.</p>
-    <p>You can browse through the available surfaces and click “View in 3D” to launch the interactive viewer.</p>
-    <p>For every surface presented here, the source data is also available via GitHub.<br>
-    You will find thumbnail <code>.jpg</code> images, <code>.obj</code> and <code>.mtl</code> files for the 3D viewer, and when available, accompanying Mathematica files.</p>
-    <p>The Mathematica files are expected to be compatible with version 12.2.0.0 or later.</p>
+  <!-- Surfaces Section -->
+  <div id="surfaces-section" style="display: none;">
+    <div class="section-heading-wrapper">
+      <div class="section-heading" onclick="toggleSection(this, 'minimal-surfaces')">
+        Minimal surfaces in \( \mathbb{R}^3 \)
+      </div>
+    </div>
+    <div id="minimal-surfaces" style="display: none; transition: all 0.4s ease;"></div>
+    <div class="section-heading-wrapper">
+      <div class="section-heading" onclick="toggleSection(this, 'cmc-s3')">
+        CMC \(1\) surfaces in \( \mathbb{S}^3 \)
+      </div>
+    </div>
+    <div id="cmc-s3" style="display: none; transition: all 0.4s ease;"></div>
+    <div class="section-heading-wrapper">
+      <div class="section-heading" onclick="toggleSection(this, 'cmc-h3')">
+        CMC \(1\) surfaces in \( \mathbb{H}^3 \)
+      </div>
+    </div>
+    <div id="cmc-h3" style="display: none; transition: all 0.4s ease;"></div>
   </div>
 
-  <!-- Toggle heading for minimal surfaces -->
-  <div class="section-heading-wrapper">
-    <div class="section-heading" onclick="toggleSection(this, 'minimal-surfaces')">
-      Minimal surfaces in \( \mathbb{R}^3 \)
+  <!-- About Section -->
+  <div id="about-section" style="display: none; padding-top: 60px;">
+    <div style="max-width: 800px; margin: 0 auto; padding: 0 20px 20px; font-size: 1rem; line-height: 1.6; color: #40342e;">
+      <p>This website serves as a repository for the surfaces I have created to date.</p>
+      <p>If you find it troublesome to generate surfaces yourself, or are simply interested in exploring them without creating your own, this site is ideal for you.</p>
+      <p>You can browse through the available surfaces and click “View in 3D” to launch the interactive viewer.</p>
+      <p>For every surface presented here, the source data is also available via GitHub.<br>
+      You will find thumbnail <code>.jpg</code> images, <code>.obj</code> and <code>.mtl</code> files for the 3D viewer, and when available, accompanying Mathematica files.</p>
+      <p>The Mathematica files are expected to be compatible with version 12.2.0.0 or later.</p>
     </div>
   </div>
-  <div id="minimal-surfaces" style="display: none;"></div>
 
-  <!-- Toggle heading for CMC in S^3 -->
-  <div class="section-heading-wrapper">
-    <div class="section-heading" onclick="toggleSection(this, 'cmc-s3')">
-      CMC \(1\) surfaces in \( \mathbb{S}^3 \)
-    </div>
+  <!-- Contact Section -->
+  <div id="contact-section" style="display: none; padding: 60px 20px; text-align: center;">
+    This is a page for Contact.
   </div>
-  <div id="cmc-s3" style="display: none;"></div>
 
-  <!-- Toggle heading for CMC in H^3 -->
-  <div class="section-heading-wrapper">
-    <div class="section-heading" onclick="toggleSection(this, 'cmc-h3')">
-      CMC \(1\) surfaces in \( \mathbb{H}^3 \)
-    </div>
-  </div>
-  <div id="cmc-h3" style="display: none;"></div>
-
+  <!-- JavaScript to handle section toggling and dropdown behavior -->
   <script>
-    function toggleSidebar() {
-      const sidebar = document.getElementById('sidebar');
-      const isOpen = sidebar.style.transform === 'translateX(0px)';
-      sidebar.style.transform = isOpen ? 'translateX(-100%)' : 'translateX(0)';
+    function scrollToSection(id) {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    function scrollToSection(id) {
-      const section = document.getElementById(id);
-      if (section) {
-        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+    // Show dropdown menu on hover
+    const navSurfaces = document.getElementById('nav-surfaces');
+    const dropdown = document.getElementById('surfaces-dropdown');
+    navSurfaces.parentElement.addEventListener('mouseenter', () => {
+      dropdown.style.display = 'block';
+      document.getElementById('surfaces-caret').style.transform = 'rotate(90deg)';
+    });
+    navSurfaces.parentElement.addEventListener('mouseleave', () => {
+      dropdown.style.display = 'none';
+      document.getElementById('surfaces-caret').style.transform = 'rotate(0deg)';
+    });
+
+    function showSection(target) {
+      const sections = ['geometry', 'surfaces', 'about', 'contact'];
+      const navs = ['nav-geometry', 'nav-surfaces', 'nav-about', 'nav-contact'];
+      sections.forEach(id => {
+        const el = document.getElementById(id + '-section');
+        if (el) el.style.display = (id === target) ? 'block' : 'none';
+      });
+      navs.forEach(id => {
+        const nav = document.getElementById(id);
+        if (nav) nav.classList.toggle('active', id === 'nav-' + target);
+      });
     }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      showSection('geometry');
+    });
 
     function toggleSection(headingEl, id) {
       const section = document.getElementById(id);
@@ -182,6 +234,7 @@
       headingEl.classList.toggle('active', !isVisible);
     }
 
+    // Load surface entries dynamically from external HTML files
     fetch('includes/scherk.html')
       .then(res => res.text())
       .then(html => {
@@ -195,6 +248,7 @@
       });
   </script>
 
+  <!-- Footer with credit -->
   <footer>
     <div style="margin-bottom: 8px;">
       Created by <a href="https://sites.google.com/view/m-hara/home-en" target="_blank" style="color: #946846; text-decoration: none; font-weight: bold;">Masaya Hara</a>

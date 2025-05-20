@@ -1,0 +1,114 @@
+/* Style for layout and typography */
+.section-heading-wrapper {
+	padding: 0 15px;
+}
+.illustration-list {
+	display: flex;
+	flex-direction: column;
+	gap: 30px;
+	padding: 0 15px;
+}
+#nav-surfaces {
+	line-height: 1.6;
+	display: inline-flex;
+	align-items: center;
+}
+body {
+	margin: 0;
+	font-family: 'Work Sans', sans-serif;
+	background-color: #fcf9f5;
+	color: #40342e;
+}
+.hero {
+	padding: 80px 20px 20px;
+	text-align: center;
+	font-family: 'Playfair Display', serif;
+}
+.hero h1 {
+	font-size: 3rem;
+	margin: 0;
+}
+.hero p {
+	font-size: 1.2rem;
+	color: #5a4c45;
+	margin-top: 1rem;
+}
+.section-heading {
+	font-family: 'Playfair Display', serif;
+	font-size: 1.8rem;
+	margin: 30px 20px 10px;
+	color: #40342e;
+	cursor: pointer;
+}
+.section-heading.active {
+	background-color: #f0e8dd;
+	padding: 10px 20px;
+	border-radius: 8px;
+}
+.illustration-item {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+	background-color: #f2ece6;
+	padding: 20px;
+	border-radius: 12px;
+	box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+	margin-bottom: 20px;
+}
+.illustration-item img {
+	width: 200px;
+	height: 200px;
+	object-fit: cover;
+	border-radius: 8px;
+}
+.illustration-info h3 {
+	margin: 0 0 8px;
+	font-family: 'Playfair Display', serif;
+	font-size: 1.3rem;
+}
+.illustration-info p {
+	margin: 0 0 10px;
+	color: #555;
+}
+.view-link {
+	font-weight: bold;
+	text-decoration: none;
+	color: #7a4e2b;
+	border: 1px solid #7a4e2b;
+	padding: 6px 12px;
+	border-radius: 6px;
+	transition: 0.2s;
+}
+.view-link:hover {
+	background-color: #7a4e2b;
+	color: #fff;
+}
+.nav-link {
+	color: #7a4e2b;
+	text-decoration: none;
+	padding: 6px 10px;
+	border-radius: 6px;
+}
+.nav-link.active {
+	background-color: #e6dfd6;
+	font-weight: 700;
+}
+footer {
+	text-align: center;
+	font-size: 0.8rem;
+	color: #8e8378;
+	padding: 40px 0;
+}
+#surfaces-dropdown a:hover {
+	background-color: rgba(242, 236, 230, 0.7);
+}
+
+/* Center the Geometry section content vertically and horizontally */
+#geometry-section {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding: 60px 20px;
+	text-align: center;
+}
