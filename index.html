@@ -4,18 +4,43 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gallery of Surfaces</title>
+
+  <!-- Load web fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Work+Sans&display=swap" rel="stylesheet">
+
+  <!-- MathJax configuration: must be defined before loading the library -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)'], ['$', '$']],  // Inline math syntax
+        displayMath: [['\\[', '\\]']],             // Display math syntax
+        processEscapes: true                       // Allow escaping with backslash
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']  // Avoid processing these tags
+      },
+      startup: {
+        typeset: false  // Defer automatic rendering until explicitly triggered
+      }
+    };
+  </script>
+
+  <!-- Load MathJax script -->
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+
+  <!-- Load main CSS stylesheet -->
   <link rel="stylesheet" href="assets/styles/main.css">
-  <script src="assets/scripts/main.js" defer></script>
-
 </head>
-<body>
-  <div class="content-wrapper"><!-- Begin content wrapper -->
 
-    <!-- Fixed navigation header -->
+<body>
+  <!-- Page wrapper that holds all main content -->
+  <div class="content-wrapper">
+
+    <!-- Fixed navigation bar at the top -->
     <header style="position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #fcf9f5; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #e0ddd7; z-index: 1000;">
       <nav style="display: flex; gap: 40px; font-size: 0.95rem; font-weight: 500; font-family: 'Work Sans', sans-serif;">
+        
+        <!-- Dropdown menu for surface categories -->
         <div style="position: relative;">
           <a href="#" id="nav-surfaces" onclick="showSection('surfaces')" class="nav-link">
             <span style="display: inline-flex; align-items: center; gap: 4px;">
@@ -23,112 +48,28 @@
             </span>
           </a>
           <div id="surfaces-dropdown" style="display: none; position: absolute; top: 100%; left: 0; background: #fcf9f5b3; box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 10px 0; border-radius: 6px; z-index: 1001; min-width: 240px;">
-            <a href="#" onclick="scrollToSection('minimal-r3')" style="display: block; padding: 6px 20px; color: #4c4c4c; text-decoration: none;">Minimal surfaces in \(\mathbb{R}^3\)</a>
+            <a href="#" onclick="scrollToSection('minimal-r3')" style="display: block; padding: 6px 20px; color: #4c4c4c; text-decoration: none;">Minimal surfaces in \( \mathbb{R}^3 \)</a>
             <a href="#" onclick="scrollToSection('cmc-s3')" style="display: block; padding: 6px 20px; color: #4c4c4c; text-decoration: none;">CMC \(1\) surfaces in \( \mathbb{S}^3 \)</a>
             <a href="#" onclick="scrollToSection('cmc-h3')" style="display: block; padding: 6px 20px; color: #4c4c4c; text-decoration: none;">CMC \(1\) surfaces in \( \mathbb{H}^3 \)</a>
           </div>
         </div>
+
+        <!-- Other static nav links -->
         <a href="#" id="nav-others" onclick="showSection('others')" class="nav-link"><span>Others</span></a>
         <a href="#" id="nav-about" onclick="showSection('about')" class="nav-link"><span>About</span></a>
       </nav>
     </header>
+
+    <!-- Spacer to prevent content hiding behind fixed header -->
     <div style="height: 60px;"></div>
 
-    <!-- Surfaces Section -->
-    <div id="surfaces-section" style="display: none;">
-      <!-- R3 -->
-      <div class="section-heading-wrapper">
-        <div class="section-title">
-          \( \bigcirc \) Surfaces in \( \mathbb{R}^3 \)
-        </div>
-      </div>
-      <div class="section-heading-wrapper">
-        <div class="section-heading" onclick="toggleSection(this, 'minimal-r3')">
-          <span class="caret">▸</span>Minimal surfaces in \( \mathbb{R}^3 \)
-        </div>
-      </div>
-      <div id="minimal-r3" style="display: none; transition: all 0.4s ease;"></div>
-      <div class="section-heading-wrapper">
-        <div class="section-heading" onclick="toggleSection(this, 'cmc-r3')">
-          <span class="caret">▸</span>CMC \(1\) surfaces in \( \mathbb{R}^3 \)
-        </div>
-      </div>
-      <div id="cmc-r3" style="display: none; transition: all 0.4s ease;"></div>
+    <!-- Sections to be dynamically populated -->
+    <div id="surfaces-section" style="display: none;"></div>  <!-- Surface section is hidden by default -->
+    <div id="others-section"></div>                          <!-- Others section loaded via fetch -->
+    <div id="about-section"></div>                           <!-- About section loaded via fetch -->
+  </div>
 
-      <!-- S3 -->
-      <div class="section-heading-wrapper">
-        <div class="section-title">
-          \( \bigcirc \) Surfaces in \( \mathbb{S}^3 \)
-        </div>
-      </div>
-      <div class="section-heading-wrapper">
-        <div class="section-heading" onclick="toggleSection(this, 'cmc-s3')">
-          <span class="caret">▸</span>CMC \(1\) surfaces in \( \mathbb{S}^3 \)
-        </div>
-      </div>
-      <div id="cmc-s3" style="display: none; transition: all 0.4s ease;"></div>
-
-      <!-- H3 -->
-      <div class="section-heading-wrapper">
-        <div class="section-title">
-          \( \bigcirc \) Surfaces in \( \mathbb{H}^3 \)
-        </div>
-      </div>
-      <div class="section-heading-wrapper">
-        <div class="section-heading" onclick="toggleSection(this, 'cmc-h3')">
-          <span class="caret">▸</span>CMC \(1\) surfaces in \( \mathbb{H}^3 \)
-        </div>
-      </div>
-      <div id="cmc-h3" style="display: none; transition: all 0.4s ease;"></div>
-    </div>
-
-    <!-- Others Section -->
-    <div id="others-section">
-      <div style="max-width: 800px; margin: 0 auto; padding: 0 20px 20px; font-size: 1rem; line-height: 1.6; color: #4c4c4c;">
-        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 1rem;">Other Galleries</h2>
-        <p>Here are some galleries of surfaces or visual data not classified by geometry or symmetry. Examples include comparative visualizations or collections unrelated to space forms.</p>
-              <!-- 項目の箇条書きリスト -->
-        <ul style="margin-top: 1rem; padding-left: 1.2rem;">
-          <li><a href="https://profs.scienze.univr.it/~baldo/tjs/" class="gallery-link">Gallery of Minimal Surfaces</a>&nbsp;&nbsp;&nbsp;&nbsp;Prof. Sisto Baldo</li>
-          <li><a href="https://home.hiroshima-u.ac.jp/fujimori/min_inR3-j.html" class="gallery-link">Minimal Surface Gallery</a>&nbsp;&nbsp;&nbsp;&nbsp;Prof. Schoich Fujimori</li>
-          <li><a href="https://mbschulz.github.io/index.html" class="gallery-link">Geometric Analysis Gallery</a>&nbsp;&nbsp;&nbsp;&nbsp;Prof. Mario B. Schulz </li>
-          <li><a href="https://www.math.uni-tuebingen.de/user/nick/gallery/Delaunay.html" class="gallery-link">Geometrie Werkstatt</a>&nbsp;&nbsp;&nbsp;&nbsp;Prof. Nich Schmitt</li>
-          <li><a href="https://minimalsurfaces.blog/" class="gallery-link">Minimal Surface Repository</a>&nbsp;&nbsp;&nbsp;&nbsp;Prof. Matthias Weber</li>
-        </ul>
-
-        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-top: 2rem; margin-bottom: 1rem;">Notations</h2>
-        <p>\(\mathbb{R}^3\) : Euclidean 3-space / \(\mathbb{S}^3\) : Spherical 3-space / \(\mathbb{H}^3\) : Hyperbolic 3-space<br>
-          \(\mathbb{L}^3\) : Minkowski 3-space / \(\mathbb{I}^3\) : Simply isotropic 3-space (Semi-Riemannian 3-space)
-        </p>
-
-        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-top: 2rem; margin-bottom: 1rem;">Mathematica Packages</h2>
-        <p>Mathematica covers a lot of additional packages including <a href="https://reference.wolfram.com/language/Quaternions/tutorial/Quaternions.html" class="gallery-link">Quaternions.m</a> and <a href="https://reference.wolfram.com/language/FourierSeries/tutorial/FourierSeries.html.en" class="gallery-link">FourierSeries.m</a>.
-        Here, we share our own custom packages for comutations of <a href="https://en.wikipedia.org/wiki/Split-complex_number" class="gallery-link">Split complexes</a> and <a href="https://en.wikipedia.org/wiki/Split-quaternion" class="gallery-link">Split quaternions</a>.
-        </p>
-      </div>
-    </div>
-
-    <!-- About Section -->
-    <div id="about-section" style="display: none; padding-top: 60px;">
-      <div style="max-width: 800px; margin: 0 auto; padding: 0 20px 20px; font-size: 1rem; line-height: 1.6; color: #4c4c4c;">
-        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 1rem;">What is included?</h2>
-        <p>This website serves as a repository for the surfaces I have created to date.</p>
-        <p>If you find it troublesome to generate surfaces yourself, or are simply interested in exploring them without creating your own, this site is ideal for you!</p>
-        <p>You can browse through the available surfaces and click “View in 3D” to launch the interactive viewer.</p>
-        <p>For every surface presented here, the source data is also available via GitHub.<br>
-        You will find thumbnail <code>.jpg</code> images, <code>.obj</code> and <code>.mtl</code> files for the 3D viewer, and when available, accompanying Mathematica files.</p>
-        <p>The Mathematica files are expected to be compatible with version 12.2.0.0 or later.</p>
-
-        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-top: 2rem; margin-bottom: 1rem;">Contact</h2>
-        <p>As someone interested in differential geometry (you can reach me at mhara[at]gmail.com), I have so far only created relatively simple examples—mostly related to CMC surfaces in space forms.</p>
-        <p>Well-known surfaces that are not yet included on this site may be added along with their data if I get the opportunity to create them in the future.</p>
-
-        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-top: 2rem; margin-bottom: 1rem;">Last update:</h2>
-      </div>
-    </div>
-  </div><!-- End content wrapper -->
-
-  <!-- Footer with credit -->
+  <!-- Page footer -->
   <footer>
     <div style="margin-bottom: 8px;">
       Created by <a href="https://sites.google.com/view/m-hara/home-en" target="_blank" style="color: #00796b; text-decoration: none; font-weight: bold;">Masaya Hara</a>
@@ -136,177 +77,24 @@
     &copy; 2025 Masaya Hara – Gallery of Surfaces
   </footer>
 
-  <!-- JavaScript to handle section toggling and dropdown behavior -->
+  <!-- Dynamically load the 'others' and 'about' sections and trigger MathJax -->
   <script>
-    function scrollToSection(id) {
-      const el = document.getElementById(id);
-      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-
-    const navSurfaces = document.getElementById('nav-surfaces');
-    const dropdown = document.getElementById('surfaces-dropdown');
-    navSurfaces.parentElement.addEventListener('mouseenter', () => {
-      dropdown.style.display = 'block';
-      document.getElementById('surfaces-caret').style.transform = 'rotate(90deg)';
-    });
-    navSurfaces.parentElement.addEventListener('mouseleave', () => {
-      dropdown.style.display = 'none';
-      document.getElementById('surfaces-caret').style.transform = 'rotate(0deg)';
-    });
-
-    function showSection(target) {
-      const sections = ['others', 'surfaces', 'about'];
-      const navs = ['nav-others', 'nav-surfaces', 'nav-about'];
-      sections.forEach(id => {
-        const el = document.getElementById(id + '-section');
-        if (el) el.style.display = (id === target) ? 'block' : 'none';
-      });
-      navs.forEach(id => {
-        const nav = document.getElementById(id);
-        if (nav) nav.classList.toggle('active', id === 'nav-' + target);
-      });
-    }
-
-    window.addEventListener('DOMContentLoaded', () => {
-      showSection('others');
-    });
-
-    function toggleSection(headingEl, id) {
-      const section = document.getElementById(id);
-      const isOpen = section.classList.contains('open');
-      headingEl.classList.toggle('active', !isOpen);
-
-      // Reset transition state
-      section.style.transition = 'max-height 0.8s ease';
-      section.style.overflow = 'hidden';
-      section.style.position = 'relative';
-      section.style.zIndex = '0';
-
-      if (!isOpen) {
-        section.classList.add('open');
-        section.style.display = 'block';
-        section.style.maxHeight = '0px';
-
-        // Force reflow
-        void section.offsetHeight;
-
-        section.style.maxHeight = section.scrollHeight + 'px';
-
-        section.addEventListener('transitionend', function handleOpen(e) {
-          if (e.propertyName !== 'max-height') return;
-          section.style.maxHeight = 'none'; // Allow natural expansion after transition
-          section.style.overflow = 'visible';
-          section.removeEventListener('transitionend', handleOpen);
-        });
-      } else {
-        section.style.maxHeight = section.scrollHeight + 'px';
-
-        // Force reflow
-        void section.offsetHeight;
-
-        section.style.maxHeight = '0px';
-
-        section.addEventListener('transitionend', function handleClose(e) {
-          if (e.propertyName !== 'max-height') return;
-          section.classList.remove('open');
-          section.style.display = 'none';
-          section.style.overflow = 'visible';
-          section.style.maxHeight = 'none';
-          section.removeEventListener('transitionend', handleClose);
-        });
-      }
-    }
-
-    fetch('includes/scherk.html')
-      .then(res => res.text())
+    fetch('includes/others.html')
+      .then(response => response.text())
       .then(html => {
-        const container = document.getElementById('minimal-r3');
-        const wrapper = document.createElement('div');
-        wrapper.classList.add('fade-in');
-        wrapper.innerHTML = html;
-        container.appendChild(wrapper);
+        document.getElementById('others-section').innerHTML = html;
+        if (window.MathJax) MathJax.typesetPromise();  // Render math after inserting HTML
       });
-    fetch('includes/enneper.html')
-      .then(res => res.text())
+
+    fetch('includes/about.html')
+      .then(response => response.text())
       .then(html => {
-        const container = document.getElementById('minimal-r3');
-        const wrapper = document.createElement('div');
-        wrapper.classList.add('fade-in');
-        wrapper.innerHTML = html;
-        container.appendChild(wrapper);
-      });
-    fetch('includes/scherk.html')
-      .then(res => res.text())
-      .then(html => {
-        const container = document.getElementById('minimal-r3');
-        const wrapper = document.createElement('div');
-        wrapper.classList.add('fade-in');
-        wrapper.innerHTML = html;
-        container.appendChild(wrapper);
-      });
-    fetch('includes/enneper.html')
-      .then(res => res.text())
-      .then(html => {
-        const container = document.getElementById('cmc-s3');
-        const wrapper = document.createElement('div');
-        wrapper.classList.add('fade-in');
-        wrapper.innerHTML = html;
-        container.appendChild(wrapper);
-      });
-    fetch('includes/scherk.html')
-      .then(res => res.text())
-      .then(html => {
-        const container = document.getElementById('cmc-s3');
-        const wrapper = document.createElement('div');
-        wrapper.classList.add('fade-in');
-        wrapper.innerHTML = html;
-        container.appendChild(wrapper);
-      });
-    fetch('includes/enneper.html')
-      .then(res => res.text())
-      .then(html => {
-        const container = document.getElementById('cmc-s3');
-        const wrapper = document.createElement('div');
-        wrapper.classList.add('fade-in');
-        wrapper.innerHTML = html;
-        container.appendChild(wrapper);
-      });
-    fetch('includes/scherk.html')
-      .then(res => res.text())
-      .then(html => {
-        const container = document.getElementById('cmc-s3');
-        const wrapper = document.createElement('div');
-        wrapper.classList.add('fade-in');
-        wrapper.innerHTML = html;
-        container.appendChild(wrapper);
-      });
-    fetch('includes/enneper.html')
-      .then(res => res.text())
-      .then(html => {
-        const container = document.getElementById('cmc-h3');
-        const wrapper = document.createElement('div');
-        wrapper.classList.add('fade-in');
-        wrapper.innerHTML = html;
-        container.appendChild(wrapper);
-      });
-    fetch('includes/scherk.html')
-      .then(res => res.text())
-      .then(html => {
-        const container = document.getElementById('cmc-h3');
-        const wrapper = document.createElement('div');
-        wrapper.classList.add('fade-in');
-        wrapper.innerHTML = html;
-        container.appendChild(wrapper);
-      });
-    fetch('includes/enneper.html')
-      .then(res => res.text())
-      .then(html => {
-        const container = document.getElementById('cmc-h3');
-        const wrapper = document.createElement('div');
-        wrapper.classList.add('fade-in');
-        wrapper.innerHTML = html;
-        container.appendChild(wrapper);
+        document.getElementById('about-section').innerHTML = html;
+        if (window.MathJax) MathJax.typesetPromise();  // Render math after inserting HTML
       });
   </script>
+
+  <!-- Load main script that builds the surfaces section dynamically -->
+  <script src="assets/scripts/main.js"></script>
 </body>
 </html>
