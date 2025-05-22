@@ -34,7 +34,7 @@ body {
 }
 
 /* Navigation layout */
-#nav-surfaces {
+#nav-gallery {
   line-height: 1.6;
   display: inline-flex;
   align-items: center;
@@ -101,7 +101,7 @@ body {
   display: flex;
   align-items: center;
   gap: 20px;
-  background-color: #fbe1c5;
+  background-color: #d0e1eb;
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
@@ -124,9 +124,10 @@ body {
 .illustration-info p {
   margin: 0 0 10px;
   color: #4c4c4c;
-  text-align: justify; /* Align text to both left and right edges */
-  text-justify: inter-word;
-  letter-spacing: 0.02em; /* Slightly loosen spacing for readability */
+  font-family: serif;
+  /* text-align: justify; */
+  /* text-justify: inter-word; */
+  /* letter-spacing: 0.02em; Slightly loosen spacing for readability */
 }
 
 /* View link styling */
@@ -138,6 +139,7 @@ body {
   padding: 6px 12px;
   border-radius: 6px;
   transition: 0.2s;
+  font-family: serif;
 }
 
 .view-link:hover {
@@ -156,7 +158,7 @@ body {
 #nav-others span, #nav-about span {
   display: inline-block;
   position: relative;
-  top: 2px;
+  top: .7px;
 }
 
 .nav-link.active {
@@ -188,12 +190,26 @@ footer {
 }
 
 /* Hover effect for dropdown menu items */
-#surfaces-dropdown a:hover {
+#gallery-dropdown a:hover {
   background-color: #dfdfdf;
+}
+
+/* Gallery section layout */
+#gallery-section {
+  display: flex;
+  padding: 30px 60px;
 }
 
 /* Others section layout */
 #others-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60px 20px;
+}
+
+/* About section layout */
+#about-section {
   display: flex;
   flex-direction: column;
   justify-content: center;

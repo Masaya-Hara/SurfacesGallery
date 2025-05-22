@@ -1,20 +1,20 @@
 // main.js
-// Dynamically load and structure the surfaces-section with minimal and CMC surfaces
+// Dynamically load and structure the gallery-section with minimal and CMC surfaces
 
 document.addEventListener('DOMContentLoaded', () => {
   // Define surface section metadata with MathJax-formatted titles and group labels
-  const surfacesData = [
+  const galleryData = [
     { id: 'minimal-r3', title: String.raw`Minimal surfaces`, group: String.raw`\(\bigcirc\) \(\mathbb{R}^3\)` },
     { id: 'cmc-r3', title: String.raw`CMC \(1\) surfaces`, group: String.raw`\(\bigcirc\) \(\mathbb{R}^3\)` },
     { id: 'cmc-s3', title: String.raw`CMC \(1\) surfaces`, group: String.raw`\(\bigcirc\) \(\mathbb{S}^3\)` },
     { id: 'cmc-h3', title: String.raw`CMC \(1\) surfaces`, group: String.raw`\(\bigcirc\) \(\mathbb{H}^3\)` },
   ];
 
-  const container = document.getElementById('surfaces-section');
+  const container = document.getElementById('gallery-section');
   let currentGroup = '';
 
   // Loop through each surface entry and generate group headings and content blocks
-  surfacesData.forEach(({ id, title, group }) => {
+  galleryData.forEach(({ id, title, group }) => {
     if (group && group !== currentGroup) {
       const groupDiv = document.createElement('div');
       groupDiv.className = 'section-heading-wrapper';
@@ -120,8 +120,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Navigation toggling for top bar
   window.showSection = function (target) {
-    const sections = ['others', 'surfaces', 'about'];
-    const navs = ['nav-others', 'nav-surfaces', 'nav-about'];
+    const sections = ['others', 'gallery', 'about'];
+    const navs = ['nav-others', 'nav-gallery', 'nav-about'];
     sections.forEach(id => {
       const el = document.getElementById(id + '-section');
       if (el) el.style.display = (id === target) ? 'block' : 'none';
@@ -131,9 +131,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (nav) nav.classList.toggle('active', id === 'nav-' + target);
     });
 
-    // ✅ Close all expanded subsections when leaving the surfaces section
-    if (target !== 'surfaces') {
-      const openSections = document.querySelectorAll('#surfaces-section .open');
+    // ✅ Close all expanded subsections when leaving the gallery section
+    if (target !== 'gallery') {
+      const openSections = document.querySelectorAll('#gallery-section .open');
       openSections.forEach(section => {
         const headingEl = section.previousElementSibling;
         if (headingEl && headingEl.classList.contains('section-heading')) {
@@ -145,16 +145,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-  // Setup dropdown behavior for "Surfaces" navigation item
-  const navSurfaces = document.getElementById('nav-surfaces');
-  const dropdown = document.getElementById('surfaces-dropdown');
-  navSurfaces.parentElement.addEventListener('mouseenter', () => {
+  // Setup dropdown behavior for "Gallery" navigation item
+  const navGallery = document.getElementById('nav-gallery');
+  const dropdown = document.getElementById('gallery-dropdown');
+  navGallery.parentElement.addEventListener('mouseenter', () => {
     dropdown.style.display = 'block';
-    document.getElementById('surfaces-caret').style.transform = 'rotate(90deg)';
+    document.getElementById('gallery-caret').style.transform = 'rotate(90deg)';
   });
-  navSurfaces.parentElement.addEventListener('mouseleave', () => {
+  navGallery.parentElement.addEventListener('mouseleave', () => {
     dropdown.style.display = 'none';
-    document.getElementById('surfaces-caret').style.transform = 'rotate(0deg)';
+    document.getElementById('gallery-caret').style.transform = 'rotate(0deg)';
   });
 
   // Smooth scroll to a specific surface subsection
@@ -163,11 +163,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  // Show the "surfaces" section by default when the page loads
-  showSection('surfaces');
+  // Show the "gallery" section by default when the page loads
+  showSection('gallery');
 
   window.handleSurfaceNav = function(sectionId) {
-  showSection('surfaces');
+  showSection('gallery');
   setTimeout(() => {
     const heading = document.querySelector(`[data-section="${sectionId}"]`);
     const section = document.getElementById(sectionId);
