@@ -1,8 +1,18 @@
-// main.js
-// Dynamically load and structure the gallery-section with minimal and CMC surfaces
+// main.js — Final version with full Safari fix, consistent ordering, and robust toggle logic
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Define surface section metadata with MathJax-formatted titles and group labels
+  const othersFetch = fetch('includes/others.html')
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById('others-section').innerHTML = html;
+    });
+
+  const aboutFetch = fetch('includes/about.html')
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById('about-section').innerHTML = html;
+    });
+
   const galleryData = [
     { id: 'minimal-r3', title: String.raw`Minimal surfaces`, group: String.raw`\(\bigcirc\) \(\mathbb{R}^3\)` },
     { id: 'cmc-r3', title: String.raw`CMC \(1\) surfaces`, group: String.raw`\(\bigcirc\) \(\mathbb{R}^3\)` },
@@ -10,115 +20,112 @@ document.addEventListener('DOMContentLoaded', () => {
     { id: 'cmc-h3', title: String.raw`CMC \(1\) surfaces`, group: String.raw`\(\bigcirc\) \(\mathbb{H}^3\)` },
   ];
 
-  const container = document.getElementById('gallery-section');
-  let currentGroup = '';
+  const contentFiles = {
+    'minimal-r3': ['enneper.html', 'scherk.html'],
+    'cmc-r3': [],
+    'cmc-s3': ['enneper.html', 'scherk.html'],
+    'cmc-h3': ['enneper.html', 'scherk.html'],
+  };
 
-  // Loop through each surface entry and generate group headings and content blocks
-  galleryData.forEach(({ id, title, group }) => {
-    if (group && group !== currentGroup) {
-      const groupDiv = document.createElement('div');
-      groupDiv.className = 'section-heading-wrapper';
-      groupDiv.innerHTML = `<div class="section-title">${group}</div>`;
-      container.appendChild(groupDiv);
-      currentGroup = group;
-    }
+  const buildGallery = () => {
+    const container = document.getElementById('gallery-section');
+    let currentGroup = '';
+    galleryData.forEach(({ id, title, group }) => {
+      if (group !== currentGroup) {
+        const groupDiv = document.createElement('div');
+        groupDiv.className = 'section-heading-wrapper';
+        groupDiv.innerHTML = `<div class="section-title">${group}</div>`;
+        container.appendChild(groupDiv);
+        currentGroup = group;
+      }
 
-    // Create collapsible section heading
-    const headingWrapper = document.createElement('div');
-    headingWrapper.className = 'section-heading-wrapper';
-    const heading = document.createElement('div');
-    heading.className = 'section-heading';
-    heading.innerHTML = `<span class="caret">▸</span>${title}`;
-    heading.setAttribute('data-section', id);
-    heading.onclick = () => toggleSection(heading, id);
-    headingWrapper.appendChild(heading);
-    container.appendChild(headingWrapper);
+      const headingWrapper = document.createElement('div');
+      headingWrapper.className = 'section-heading-wrapper';
+      const heading = document.createElement('div');
+      heading.className = 'section-heading';
+      heading.innerHTML = `<span class="caret">▸</span>${title}`;
+      heading.setAttribute('data-section', id);
+      heading.onclick = () => toggleSection(heading, id);
+      headingWrapper.appendChild(heading);
+      container.appendChild(headingWrapper);
 
-    // Ensure MathJax renders section titles immediately after insertion
-    if (window.MathJax) {
-      MathJax.typesetPromise([heading]);
-    }
+      const contentDiv = document.createElement('div');
+      contentDiv.id = id;
+      contentDiv.style.display = 'none';
+      container.appendChild(contentDiv);
+    });
+  };
 
-    // Create container for the inner contents of this surface category
-    const contentDiv = document.createElement('div');
-    contentDiv.id = id;
-    contentDiv.style.display = 'none';
-    contentDiv.style.transition = 'all 0.4s ease';
-    container.appendChild(contentDiv);
-  });
-
-  // Load HTML content for each section and render it
-  Promise.resolve().then(() => {
-    const contentFiles = {
-      'minimal-r3': ['scherk.html', 'enneper.html'],
-      'cmc-r3': [],
-      'cmc-s3': ['scherk.html', 'enneper.html'],
-      'cmc-h3': ['scherk.html', 'enneper.html'],
-    };
-
+  const loadGalleryContent = () => {
+    const promises = [];
     Object.entries(contentFiles).forEach(([id, files]) => {
       const section = document.getElementById(id);
       files.forEach(file => {
-        fetch(`includes/${file}`)
+        const p = fetch(`includes/${file}`)
           .then(res => res.text())
           .then(html => {
             const wrapper = document.createElement('div');
             wrapper.classList.add('fade-in');
             wrapper.innerHTML = html;
             section.appendChild(wrapper);
-
-            // Ensure MathJax renders dynamically inserted surface descriptions
-            if (window.MathJax) {
-              requestAnimationFrame(() => {
-                MathJax.typesetPromise([wrapper]);
-              });
-            }
           });
+        promises.push(p);
       });
+    });
+    return Promise.all(promises);
+  };
+
+  Promise.all([othersFetch, aboutFetch]).then(() => {
+    buildGallery();
+    loadGalleryContent().then(() => {
+      if (window.MathJax) {
+        MathJax.typesetPromise().then(() => showSection('gallery'));
+      } else {
+        showSection('gallery');
+      }
     });
   });
 
-  // Toggle the open/close state of a section
+  // Toggle logic with Safari fallback
   window.toggleSection = function (headingEl, id) {
     const section = document.getElementById(id);
     const isOpen = section.classList.contains('open');
     headingEl.classList.toggle('active', !isOpen);
 
-    section.style.transition = 'max-height 0.8s ease';
-    section.style.overflow = 'hidden';
-    section.style.position = 'relative';
-    section.style.zIndex = '0';
-
     if (!isOpen) {
       section.classList.add('open');
       section.style.display = 'block';
       section.style.maxHeight = '0px';
-      void section.offsetHeight;
-      section.style.maxHeight = section.scrollHeight + 'px';
-
-      section.addEventListener('transitionend', function handleOpen(e) {
-        if (e.propertyName !== 'max-height') return;
-        section.style.maxHeight = 'none';
-        section.style.overflow = 'visible';
-        section.removeEventListener('transitionend', handleOpen);
+      requestAnimationFrame(() => {
+        section.style.transition = 'max-height 0.6s ease';
+        section.style.maxHeight = section.scrollHeight + 'px';
       });
+      section.addEventListener('transitionend', function finalizeOpen(e) {
+        if (e.propertyName === 'max-height') {
+          section.style.maxHeight = 'none';
+          section.style.overflow = 'visible';
+          section.removeEventListener('transitionend', finalizeOpen);
+        }
+      }, { once: true });
     } else {
+      section.style.transition = 'max-height 0.6s ease';
       section.style.maxHeight = section.scrollHeight + 'px';
-      void section.offsetHeight;
-      section.style.maxHeight = '0px';
-
-      section.addEventListener('transitionend', function handleClose(e) {
-        if (e.propertyName !== 'max-height') return;
-        section.classList.remove('open');
-        section.style.display = 'none';
-        section.style.overflow = 'visible';
-        section.style.maxHeight = 'none';
-        section.removeEventListener('transitionend', handleClose);
+      requestAnimationFrame(() => {
+        section.style.maxHeight = '0px';
       });
+      section.addEventListener('transitionend', function finalizeClose(e) {
+        if (e.propertyName === 'max-height') {
+          section.classList.remove('open');
+          section.style.display = 'none';
+          section.style.overflow = 'visible';
+          section.style.maxHeight = 'none';
+          section.removeEventListener('transitionend', finalizeClose);
+        }
+      }, { once: true });
     }
   };
 
-  // Navigation toggling for top bar
+  // Navigation switcher
   window.showSection = function (target) {
     const sections = ['others', 'gallery', 'about'];
     const navs = ['nav-others', 'nav-gallery', 'nav-about'];
@@ -131,7 +138,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (nav) nav.classList.toggle('active', id === 'nav-' + target);
     });
 
-    // ✅ Close all expanded subsections when leaving the gallery section
     if (target !== 'gallery') {
       const openSections = document.querySelectorAll('#gallery-section .open');
       openSections.forEach(section => {
@@ -143,9 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-
-
-  // Setup dropdown behavior for "Gallery" navigation item
+  // Gallery dropdown hover handler
   const navGallery = document.getElementById('nav-gallery');
   const dropdown = document.getElementById('gallery-dropdown');
   navGallery.parentElement.addEventListener('mouseenter', () => {
@@ -157,30 +161,25 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('gallery-caret').style.transform = 'rotate(0deg)';
   });
 
-  // Smooth scroll to a specific surface subsection
+  // Scroll to section by ID
   window.scrollToSection = function (id) {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  // Show the "gallery" section by default when the page loads
-  showSection('gallery');
-
+  // Scroll and open specific gallery subsection
   window.handleSurfaceNav = function(sectionId) {
-  showSection('gallery');
-  setTimeout(() => {
-    const heading = document.querySelector(`[data-section="${sectionId}"]`);
-    const section = document.getElementById(sectionId);
-    if (heading && section) {
-      const isOpen = section.classList.contains('open');
-      if (!isOpen) heading.click(); // Only toggle if not already open
-
-      // Adjust for fixed navigation bar (60px height)
-      const yOffset = -60;
-      const y = heading.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: 'smooth' });
-    }
-  }, 300);
-};
-
+    showSection('gallery');
+    setTimeout(() => {
+      const heading = document.querySelector(`[data-section="${sectionId}"]`);
+      const section = document.getElementById(sectionId);
+      if (heading && section) {
+        const isOpen = section.classList.contains('open');
+        if (!isOpen) heading.click();
+        const yOffset = -60;
+        const y = heading.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+    }, 300);
+  };
 });

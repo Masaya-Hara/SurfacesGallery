@@ -7,9 +7,11 @@
   <link rel="icon" type="image/png" href="assets/images/deer_logo_transparent_simplified.png">
 
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Work+Sans&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 
-  <!-- ✅ MathJax 設定：必ずスクリプトより前に置く -->
+  <!-- MathJax configuration -->
   <script>
     window.MathJax = {
       tex: {
@@ -27,29 +29,30 @@
   </script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
 
-  <!-- CSS -->
+  <!-- Main CSS -->
   <link rel="stylesheet" href="assets/styles/main.css">
 </head>
-
 <body>
   <div class="content-wrapper">
 
-    <!-- Fixed navigation header with logo and centered navigation -->
-    <header style="position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #fcf9f5; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #e0ddd7; z-index: 1000;">
-      <!-- Relative container for positioning logo on the left -->
+    <!-- Fixed navigation header -->
+    <header style="position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #fcf9f5; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #e0ddd7; z-index: 1000; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);">
+      <!-- Logo and title on the left -->
       <div style="position: absolute; left: 20px; display: flex; align-items: center; gap: 10px;">
         <img src="assets/images/deer_logo_transparent_simplified.png" alt="Logo" style="height: 36px;">
         <span style="font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 600; color: #4c4c4c;">Gallery of Surfaces</span>
       </div>
 
       <!-- Centered navigation bar -->
-      <nav style="display: flex; gap: 20px; font-size: 0.95rem; font-weight: 500; font-family: 'Work Sans', sans-serif;">
-        <div style="position: relative;">
-          <a href="#" id="nav-gallery" onclick="showSection('gallery')" class="nav-link">
+      <nav style="display: flex; gap: 24px; align-items: center; font-size: 0.95rem; font-weight: 500; font-family: 'Work Sans', sans-serif; height: 100%;">
+        <!-- Gallery dropdown -->
+        <div style="position: relative; height: 100%; display: flex; align-items: center;">
+          <a href="#" id="nav-gallery" onclick="showSection('gallery')" class="nav-link" style="height: 100%; display: flex; align-items: center;">
             <span style="display: inline-flex; align-items: center; gap: 4px;">
               Gallery<span style="display:inline-block; width: 8px;"></span><span id="gallery-caret" style="display: inline-block; transition: transform 0.3s ease;">▸</span>
             </span>
           </a>
+          <!-- Dropdown content -->
           <div id="gallery-dropdown" style="display: none; position: absolute; top: 100%; left: 0; background: #fcf9f5b3; box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 10px 0; border-radius: 6px; z-index: 1001; min-width: 240px;">
             <a style="display: block; font-size: 1.3rem; padding: 6px 20px; color: #4c4c4c; text-decoration: none;">\(\circ\)  \( \mathbb{R}^3 \)</a>
             <a href="#" onclick="handleSurfaceNav('minimal-r3')" class="navigation-link">▸ Minimal surfaces</a>
@@ -60,18 +63,18 @@
             <a href="#" onclick="handleSurfaceNav('cmc-h3')"  class="navigation-link">▸ CMC \(1\) surfaces</a>
           </div>
         </div>
-        <a href="#" id="nav-others" onclick="showSection('others')" class="nav-link"><span>Others</span></a>
-        <a href="#" id="nav-about" onclick="showSection('about')" class="nav-link"><span>About</span></a>
+        <a href="#" id="nav-others" onclick="showSection('others')" class="nav-link" style="display: flex; align-items: center; height: 100%;"><span>Others</span></a>
+        <a href="#" id="nav-about" onclick="showSection('about')" class="nav-link" style="display: flex; align-items: center; height: 100%;"><span>About</span></a>
       </nav>
     </header>
 
-    <!-- Spacer for fixed header -->
+    <!-- Spacer below fixed header -->
     <div style="height: 60px;"></div>
 
-    <!-- Sections -->
+    <!-- Content Sections -->
     <div id="gallery-section" style="display: none;"></div>
-    <div id="others-section"></div>
-    <div id="about-section"></div>
+    <div id="others-section" style="display: none;"></div>
+    <div id="about-section" style="display: none;"></div>
   </div>
 
   <!-- Footer -->
@@ -82,24 +85,7 @@
     &copy; 2025 Masaya Hara – Gallery of Surfaces
   </footer>
 
-  <!-- Load sections via fetch -->
-  <script>
-    fetch('includes/others.html')
-      .then(response => response.text())
-      .then(html => {
-        document.getElementById('others-section').innerHTML = html;
-        if (window.MathJax) MathJax.typesetPromise();
-      });
-
-    fetch('includes/about.html')
-      .then(response => response.text())
-      .then(html => {
-        document.getElementById('about-section').innerHTML = html;
-        if (window.MathJax) MathJax.typesetPromise();
-      });
-  </script>
-
-  <!-- Define a reusable function for dropdown navigation -->
+  <!-- Navigation handler -->
   <script>
     window.handleSurfaceNav = function(sectionId) {
       showSection('gallery');
@@ -115,6 +101,7 @@
     };
   </script>
 
+  <!-- Main script -->
   <script src="assets/scripts/main.js"></script>
 </body>
 </html>
