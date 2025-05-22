@@ -211,6 +211,21 @@ a.gallery-link:hover {
   text-decoration: underline;
 }
 
+/* Navigation link styles */
+a.navigation-link {
+  display: block;
+  padding: 0px 30px;
+  text-decoration: none;
+  color: #00796b;
+}
+
+a.navigation-link:hover {
+  display: block;
+  padding: 0px 30px;
+  text-decoration: none;
+  color: #db6c6c;
+}
+
 /* Paragraph styling for general use */
 p {
   text-align: justify; /* Full justification */

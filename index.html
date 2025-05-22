@@ -4,43 +4,46 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gallery of Surfaces</title>
+  <link rel="icon" type="image/png" href="assets/images/deer_logo_transparent_simplified.png">
 
-  <!-- Load web fonts -->
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Work+Sans&display=swap" rel="stylesheet">
 
-  <!-- MathJax configuration: must be defined before loading the library -->
+  <!-- ✅ MathJax 設定：必ずスクリプトより前に置く -->
   <script>
     window.MathJax = {
       tex: {
-        inlineMath: [['\\(', '\\)'], ['$', '$']],  // Inline math syntax
-        displayMath: [['\\[', '\\]']],             // Display math syntax
-        processEscapes: true                       // Allow escaping with backslash
+        inlineMath: [['\\(', '\\)'], ['$', '$']],
+        displayMath: [['\\[', '\\]']],
+        processEscapes: true
       },
       options: {
-        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']  // Avoid processing these tags
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
       },
       startup: {
-        typeset: false  // Defer automatic rendering until explicitly triggered
+        typeset: false
       }
     };
   </script>
-
-  <!-- Load MathJax script -->
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
 
-  <!-- Load main CSS stylesheet -->
+  <!-- CSS -->
   <link rel="stylesheet" href="assets/styles/main.css">
 </head>
 
 <body>
-  <!-- Page wrapper that holds all main content -->
   <div class="content-wrapper">
 
-    <!-- Fixed navigation bar at the top -->
+    <!-- Fixed navigation header with logo and centered navigation -->
     <header style="position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #fcf9f5; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #e0ddd7; z-index: 1000;">
+      <!-- Relative container for positioning logo on the left -->
+      <div style="position: absolute; left: 20px; display: flex; align-items: center; gap: 10px;">
+        <img src="assets/images/deer_logo_transparent_simplified.png" alt="Logo" style="height: 36px;">
+        <span style="font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 600; color: #4c4c4c;">Gallery of Surfaces</span>
+      </div>
+
+      <!-- Centered navigation bar -->
       <nav style="display: flex; gap: 40px; font-size: 0.95rem; font-weight: 500; font-family: 'Work Sans', sans-serif;">
-        
-        <!-- Dropdown menu for surface categories -->
         <div style="position: relative;">
           <a href="#" id="nav-surfaces" onclick="showSection('surfaces')" class="nav-link">
             <span style="display: inline-flex; align-items: center; gap: 4px;">
@@ -48,28 +51,30 @@
             </span>
           </a>
           <div id="surfaces-dropdown" style="display: none; position: absolute; top: 100%; left: 0; background: #fcf9f5b3; box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 10px 0; border-radius: 6px; z-index: 1001; min-width: 240px;">
-            <a href="#" onclick="scrollToSection('minimal-r3')" style="display: block; padding: 6px 20px; color: #4c4c4c; text-decoration: none;">Minimal surfaces in \( \mathbb{R}^3 \)</a>
-            <a href="#" onclick="scrollToSection('cmc-s3')" style="display: block; padding: 6px 20px; color: #4c4c4c; text-decoration: none;">CMC \(1\) surfaces in \( \mathbb{S}^3 \)</a>
-            <a href="#" onclick="scrollToSection('cmc-h3')" style="display: block; padding: 6px 20px; color: #4c4c4c; text-decoration: none;">CMC \(1\) surfaces in \( \mathbb{H}^3 \)</a>
+            <a style="display: block; font-size: 1.3rem; padding: 6px 20px; color: #4c4c4c; text-decoration: none;">\(\circ\)  \( \mathbb{R}^3 \)</a>
+            <a href="#" onclick="handleSurfaceNav('minimal-r3')" class="navigation-link">▸ Minimal surfaces</a>
+            <a href="#" onclick="handleSurfaceNav('cmc-r3')"  class="navigation-link">▸ CMC \(1\) surfaces</a>
+            <a style="display: block; font-size: 1.3rem; padding: 6px 20px; color: #4c4c4c; text-decoration: none;">\(\circ\)  \( \mathbb{S}^3 \)</a>
+            <a href="#" onclick="handleSurfaceNav('cmc-s3')"  class="navigation-link">▸ CMC \(1\) surfaces</a>
+            <a style="display: block; font-size: 1.3rem; padding: 6px 20px; color: #4c4c4c; text-decoration: none;">\(\circ\)  \( \mathbb{H}^3 \)</a>
+            <a href="#" onclick="handleSurfaceNav('cmc-h3')"  class="navigation-link">▸ CMC \(1\) surfaces</a>
           </div>
         </div>
-
-        <!-- Other static nav links -->
         <a href="#" id="nav-others" onclick="showSection('others')" class="nav-link"><span>Others</span></a>
         <a href="#" id="nav-about" onclick="showSection('about')" class="nav-link"><span>About</span></a>
       </nav>
     </header>
 
-    <!-- Spacer to prevent content hiding behind fixed header -->
+    <!-- Spacer for fixed header -->
     <div style="height: 60px;"></div>
 
-    <!-- Sections to be dynamically populated -->
-    <div id="surfaces-section" style="display: none;"></div>  <!-- Surface section is hidden by default -->
-    <div id="others-section"></div>                          <!-- Others section loaded via fetch -->
-    <div id="about-section"></div>                           <!-- About section loaded via fetch -->
+    <!-- Sections -->
+    <div id="surfaces-section" style="display: none;"></div>
+    <div id="others-section"></div>
+    <div id="about-section"></div>
   </div>
 
-  <!-- Page footer -->
+  <!-- Footer -->
   <footer>
     <div style="margin-bottom: 8px;">
       Created by <a href="https://sites.google.com/view/m-hara/home-en" target="_blank" style="color: #00796b; text-decoration: none; font-weight: bold;">Masaya Hara</a>
@@ -77,24 +82,39 @@
     &copy; 2025 Masaya Hara – Gallery of Surfaces
   </footer>
 
-  <!-- Dynamically load the 'others' and 'about' sections and trigger MathJax -->
+  <!-- Load sections via fetch -->
   <script>
     fetch('includes/others.html')
       .then(response => response.text())
       .then(html => {
         document.getElementById('others-section').innerHTML = html;
-        if (window.MathJax) MathJax.typesetPromise();  // Render math after inserting HTML
+        if (window.MathJax) MathJax.typesetPromise();
       });
 
     fetch('includes/about.html')
       .then(response => response.text())
       .then(html => {
         document.getElementById('about-section').innerHTML = html;
-        if (window.MathJax) MathJax.typesetPromise();  // Render math after inserting HTML
+        if (window.MathJax) MathJax.typesetPromise();
       });
   </script>
 
-  <!-- Load main script that builds the surfaces section dynamically -->
+  <!-- Define a reusable function for dropdown navigation -->
+  <script>
+    window.handleSurfaceNav = function(sectionId) {
+      showSection('surfaces');
+      setTimeout(() => {
+        const heading = document.querySelector(`[data-section="${sectionId}"]`);
+        const section = document.getElementById(sectionId);
+        if (heading && section) {
+          const isOpen = section.classList.contains('open');
+          if (!isOpen) heading.click();
+          heading.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 300);
+    };
+  </script>
+
   <script src="assets/scripts/main.js"></script>
 </body>
 </html>
