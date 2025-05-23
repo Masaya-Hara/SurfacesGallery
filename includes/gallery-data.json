@@ -1,0 +1,20 @@
+[
+  {
+    "group": "\\(\\mathbb{R}^3\\)",
+    "id": "minimal-r3",
+    "title": "Minimal surfaces",
+    "items": ["scherk.html", "enneper.html"]
+  },
+  {
+    "group": "\\(\\mathbb{S}^3\\)",
+    "id": "cmc-s3",
+    "title": "CMC \\(1\\) surfaces",
+    "items": ["scherk.html"]
+  },
+  {
+    "group": "\\(\\mathbb{H}^3\\)",
+    "id": "cmc-h3",
+    "title": "CMC \\(1\\) surfaces",
+    "items": ["enneper.html"]
+  }
+]
