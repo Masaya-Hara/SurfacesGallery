@@ -143,8 +143,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-
-
   // Setup dropdown behavior for "Gallery" navigation item
   const navGallery = document.getElementById('nav-gallery');
   const dropdown = document.getElementById('gallery-dropdown');
