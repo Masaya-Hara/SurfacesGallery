@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
       contentDiv.style.display = 'none';
       container.appendChild(contentDiv);
     });
-  };
+  });
 
   const loadGalleryContent = () => {
     const promises = [];
@@ -173,5 +173,3 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }, 300);
 };
-
-});
