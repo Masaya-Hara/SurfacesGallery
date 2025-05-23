@@ -13,8 +13,8 @@
   },
   {
     "group": "⚪︎ \\(\\mathbb{R}^3\\)",
-    "id": "cmc-r3",
-    "title": "CGC \\(-1\\) surfaces (pseudo-spherical surfaces)",
+    "id": "cgc-r3",
+    "title": "CGC -\\(1\\) surfaces (pseudo-spherical surfaces)",
     "items": ["scherk.html", "enneper.html"]
   },
 

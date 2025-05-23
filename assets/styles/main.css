@@ -36,6 +36,7 @@ h1, h2, h3, h4, h5, h6 {
 .content-wrapper {
   min-height: calc(100vh - 120px); /* Full height minus footer space */
   padding-bottom: 40px;
+  margin-left: 220px;
 }
 
 /* Section layout and spacing */
@@ -244,7 +245,7 @@ a.gallery-link:hover {
   text-decoration: underline;
 }
 
-/* Navigation link styles */
+/* Navigation link styles
 a.navigation-link {
   display: block;
   padding: 0px 30px;
@@ -257,7 +258,7 @@ a.navigation-link:hover {
   padding: 0px 30px;
   text-decoration: none;
   color: #db6c6c;
-}
+} */
 
 /* Paragraph styling for general use */
 p {
@@ -305,4 +306,36 @@ p {
 
 .highlight-current {
   background-color: #ffad99;
+}
+
+#toc-sidebar {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  bottom: 0;
+  width: 220px;
+  padding: 20px;
+  overflow-y: auto;
+  background: #f8f8f8;
+  border-right: 1px solid #ddd;
+  font-family: 'Work Sans', sans-serif;
+  font-size: 1.2rem;
+  z-index: 999;
+}
+.content-wrapper {
+  margin-left: 220px;
+}
+#toc-list {
+  list-style: none;
+  padding-left: 0;
+}
+a.toc-link {
+  display: block;
+  padding: 4px 0px;
+  text-decoration: none;
+  color: #00796b;
+  transition: color 0.2s ease;
+}
+a.toc-link:hover {
+  color: #db6c6c;
 }
