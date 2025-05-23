@@ -52,3 +52,150 @@ document.addEventListener("DOMContentLoaded", () => {
       if (window.MathJax) MathJax.typesetPromise();
     });
 });
+
+function showSection(target) {
+  const sections = ['gallery', 'others', 'about'];
+  const navs = ['nav-gallery', 'nav-others', 'nav-about'];
+  sections.forEach(id => {
+    const el = document.getElementById(id + '-section');
+    if (el) el.style.display = (id === target) ? 'block' : 'none';
+  });
+  navs.forEach(id => {
+    const nav = document.getElementById(id);
+    if (nav) nav.classList.toggle('active', id === 'nav-' + target);
+  });
+}
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const observer = new MutationObserver(() => {
+    document.querySelectorAll(".surface-section summary").forEach(summary => {
+      if (!summary.querySelector(".caret")) {
+        const caret = document.createElement("span");
+        caret.className = "caret";
+        caret.innerHTML = '▸<span style="display:inline-block; width: 10px;"></span>';
+        summary.prepend(caret);
+      }
+      summary.addEventListener("click", () => {
+        setTimeout(() => {
+          summary.classList.toggle("active", summary.parentElement.hasAttribute("open"));
+        }, 0);
+      });
+    });
+  });
+  observer.observe(document.getElementById("gallery-section"), { childList: true, subtree: true });
+
+  const searchInput = document.getElementById('search-input');
+  let matches = [];
+  let currentIndex = -1;
+
+  function updateHighlights(query) {
+    document.querySelectorAll('.highlight-match').forEach(el => {
+      const parent = el.parentNode;
+      parent.replaceChild(document.createTextNode(el.textContent), el);
+      parent.normalize();
+    });
+    matches = [];
+    currentIndex = -1;
+    const counter = document.getElementById('search-counter');
+    counter.textContent = '';
+    if (!query) return;
+    const elements = document.querySelectorAll('.illustration-info h3, .illustration-info p');
+    elements.forEach(el => {
+      const text = el.textContent;
+      const regex = new RegExp(`(${query})`, 'gi');
+      if (regex.test(text)) {
+        el.innerHTML = text.replace(regex, '<span class="highlight-match">$1</span>');
+        matches.push(...el.querySelectorAll('.highlight-match'));
+      }
+    });
+    if (matches.length > 0) {
+      counter.textContent = `1/${matches.length}`;
+      currentIndex = 0;
+      matches[0].classList.add('highlight-current');
+    }
+  }
+
+  searchInput.addEventListener('input', e => {
+    updateHighlights(e.target.value.trim());
+  });
+
+  searchInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && matches.length > 0) {
+      if (document.getElementById('gallery-section').style.display === 'none') {
+        showSection('gallery');
+      }
+      currentIndex = (currentIndex + 1) % matches.length;
+      matches.forEach(el => el.classList.remove('highlight-current'));
+      const current = matches[currentIndex];
+      current.classList.add('highlight-current');
+      const details = current.closest('details');
+      if (details && !details.open) details.open = true;
+      current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      const counter = document.getElementById('search-counter');
+      counter.textContent = `${currentIndex + 1}/${matches.length}`;
+    }
+  });
+});
+
+// document.addEventListener("DOMContentLoaded", () => {
+//   const observer = new MutationObserver(() => {
+//     document.querySelectorAll(".surface-section summary").forEach(summary => {
+//       if (!summary.querySelector(".caret")) {
+//         const caret = document.createElement("span");
+//         caret.className = "caret";
+//         caret.innerHTML = '▸<span style="display:inline-block; width: 10px;"></span>';
+//         summary.prepend(caret);
+//       }
+//       summary.addEventListener("click", () => {
+//         setTimeout(() => {
+//           summary.classList.toggle("active", summary.parentElement.hasAttribute("open"));
+//         }, 0);
+//       });
+//     });
+//   });
+//   observer.observe(document.getElementById("gallery-section"), { childList: true, subtree: true });
+
+//   const searchInput = document.getElementById('search-input');
+//   let matches = [];
+//   let currentIndex = -1;
+
+//   function updateHighlights(query) {
+//     document.querySelectorAll('.highlight-match').forEach(el => {
+//       const parent = el.parentNode;
+//       parent.replaceChild(document.createTextNode(el.textContent), el);
+//       parent.normalize();
+//     });
+//     matches = [];
+//     currentIndex = -1;
+//     if (!query) return;
+//     const elements = document.querySelectorAll('.illustration-info h3, .illustration-info p');
+//     elements.forEach(el => {
+//       const text = el.textContent;
+//       const regex = new RegExp(`(${query})`, 'gi');
+//       if (regex.test(text)) {
+//         el.innerHTML = text.replace(regex, '<span class="highlight-match">$1</span>');
+//         matches.push(...el.querySelectorAll('.highlight-match'));
+//       }
+//     });
+//   }
+
+//   searchInput.addEventListener('input', e => {
+//     updateHighlights(e.target.value.trim());
+//   });
+
+//   searchInput.addEventListener('keydown', e => {
+//     if (e.key === 'Enter' && matches.length > 0) {
+//       if (document.getElementById('gallery-section').style.display === 'none') {
+//         showSection('gallery');
+//       }
+//       currentIndex = (currentIndex + 1) % matches.length;
+//       matches.forEach(el => el.classList.remove('highlight-current'));
+//       const current = matches[currentIndex];
+//       current.classList.add('highlight-current');
+//       const details = current.closest('details');
+//       if (details && !details.open) details.open = true;
+//       current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+//     }
+//   });
+// });

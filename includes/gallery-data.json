@@ -1,19 +1,63 @@
 [
   {
-    "group": "\\(\\mathbb{R}^3\\)",
+    "group": "⚪︎ \\(\\mathbb{R}^3\\)",
     "id": "minimal-r3",
     "title": "Minimal surfaces",
     "items": ["scherk.html", "enneper.html"]
   },
   {
-    "group": "\\(\\mathbb{S}^3\\)",
+    "group": "⚪︎ \\(\\mathbb{R}^3\\)",
+    "id": "cmc-r3",
+    "title": "CMC \\(1\\) surfaces",
+    "items": ["scherk.html", "enneper.html"]
+  },
+  {
+    "group": "⚪︎ \\(\\mathbb{R}^3\\)",
+    "id": "cmc-r3",
+    "title": "CGC \\(-1\\) surfaces (pseudo-spherical surfaces)",
+    "items": ["scherk.html", "enneper.html"]
+  },
+
+
+  {
+    "group": "⚪︎ \\(\\mathbb{S}^3\\)",
     "id": "cmc-s3",
     "title": "CMC \\(1\\) surfaces",
     "items": ["scherk.html"]
   },
+
+
   {
-    "group": "\\(\\mathbb{H}^3\\)",
+    "group": "⚪︎ \\(\\mathbb{H}^3\\)",
     "id": "cmc-h3",
+    "title": "CMC \\(1\\) surfaces",
+    "items": ["enneper.html"]
+  },
+
+
+  {
+    "group": "⚪︎ \\(\\mathbb{L}^3\\)",
+    "id": "maximal-l3",
+    "title": "Maximal surfaces (Maxfaces)",
+    "items": ["scherk.html"]
+  },
+  {
+    "group": "⚪︎ \\(\\mathbb{L}^3\\)",
+    "id": "mixed-l3",
+    "title": "Type-changing surfaces (Mixed surfaces)",
+    "items": ["scherk.html"]
+  },
+
+
+  {
+    "group": "⚪︎ \\(\\mathbb{I}^3\\)",
+    "id": "zmc-i3",
+    "title": "Zero mean curvature surfaces",
+    "items": ["enneper.html"]
+  },
+  {
+    "group": "⚪︎ \\(\\mathbb{I}^3\\)",
+    "id": "cmc-i3",
     "title": "CMC \\(1\\) surfaces",
     "items": ["enneper.html"]
   }
