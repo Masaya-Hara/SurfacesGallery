@@ -17,80 +17,7 @@ html, body {
   padding-bottom: 40px;
 }
 
-/* Navigation links */
-.nav-link {
-  color: #4c4c4c;
-  text-decoration: none;
-  padding: 6px 10px;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  height: 100%;
-}
-
-.nav-link.active {
-  background-color: #dfdfdf;
-  font-weight: 700;
-}
-
-/* Adjust icon position */
-#nav-others span,
-#nav-about span {
-  position: relative;
-  top: -2px;
-}
-
-/* Dropdown items */
-a.navigation-link {
-  display: block;
-  padding: 0px 30px;
-  text-decoration: none;
-  color: #00796b;
-}
-
-a.navigation-link:hover {
-  color: #db6c6c;
-}
-
-/* Section caret */
-.section-heading .caret {
-  display: inline-block;
-  transition: transform 0.3s ease;
-  margin-right: 6px;
-}
-
-.section-heading.active .caret {
-  transform: rotate(90deg);
-}
-
-/* Section title */
-.section-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 2.1rem;
-  font-weight: 600;
-  margin: 50px 20px 10px;
-  color: #4c4c4c;
-  margin-left: 5px;
-  line-height: 1.2;
-}
-
-/* Section headings */
-.section-heading {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin: 0px 20px;
-  color: #4c4c4c;
-  cursor: pointer;
-  padding: 10px 20px;
-  border-radius: 8px;
-}
-
-.section-heading.active {
-  background-color: #dfdfdf;
-}
-
-/* Layout containers */
+/* Section layout and spacing */
 .section-heading-wrapper {
   padding: 0 15px;
 }
@@ -103,16 +30,79 @@ a.navigation-link:hover {
 }
 
 #minimal-r3, #cmc-s3, #cmc-h3 {
-  padding: 0 35px;
+  padding: 0 35px; /* Left-right spacing */
 }
 
-/* Surface item block */
+/* Navigation layout */
+#nav-surfaces {
+  line-height: 1.6;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Hero section */
+.hero {
+  padding: 80px 20px 20px;
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin: 0;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  color: #4c4c4c;
+  margin-top: 1rem;
+}
+
+/* Section heading caret icon */
+.section-heading .caret {
+  display: inline-block;
+  transition: transform 0.3s ease;
+  margin-right: 6px;
+}
+
+.section-heading.active .caret {
+  transform: rotate(90deg);
+}
+
+/* Section title design */
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.1rem;
+  /* font-weight: 600; */
+  margin: 50px 20px 10px;
+  color: #4c4c4c;
+  margin-left: 5px;
+  padding: 0;
+  line-height: 1.2;
+}
+
+/* Section heading */
+.section-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  margin: 0px 20px 0px;
+  color: #4c4c4c;
+  cursor: pointer;
+  padding: 10px 20px;
+  border-radius: 8px;
+}
+
+.section-heading.active {
+  background-color: #dfdfdf;
+}
+
+/* Illustration item box */
 .illustration-item {
   display: flex;
   align-items: center;
   flex-direction: row;
   gap: 20px;
-  background-color: #fddbb3;
+  background-color: #fbe1c5;
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
@@ -136,9 +126,9 @@ a.navigation-link:hover {
 .illustration-info p {
   margin: 0 0 10px;
   color: #4c4c4c;
-  text-align: justify;
+  text-align: justify; /* Align text to both left and right edges */
   text-justify: inter-word;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.02em; /* Slightly loosen spacing for readability */
 }
 
 /* Button styling */
@@ -158,7 +148,26 @@ a.navigation-link:hover {
   color: #fff;
 }
 
-/* Entrance animation */
+/* Navigation link styling */
+.nav-link {
+  color: #4c4c4c;
+  text-decoration: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+#nav-others span, #nav-about span {
+  display: inline-block;
+  position: relative;
+  top: 2px;
+}
+
+.nav-link.active {
+  background-color: #dfdfdf;
+  font-weight: 700;
+}
+
+/* Animation for content entrance */
 .fade-in {
   opacity: 0;
   transform: translateY(10px);
@@ -181,7 +190,12 @@ footer {
   background-color: #fcf9f5;
 }
 
-/* Others layout */
+/* Hover effect for dropdown menu items */
+#surfaces-dropdown a:hover {
+  background-color: #dfdfdf;
+}
+
+/* Others section layout */
 #others-section {
   display: flex;
   flex-direction: column;
@@ -189,7 +203,7 @@ footer {
   padding: 60px 20px;
 }
 
-/* Link styles */
+/* Gallery link styles */
 a.gallery-link {
   color: #00796b;
   text-decoration: underline;

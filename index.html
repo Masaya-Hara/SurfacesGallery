@@ -44,16 +44,14 @@
       </div>
 
       <!-- Centered navigation bar -->
-      <nav style="display: flex; gap: 24px; align-items: center; font-size: 0.95rem; font-weight: 500; font-family: 'Work Sans', sans-serif; height: 100%;">
-        <!-- Gallery dropdown -->
-        <div style="position: relative; height: 100%; display: flex; align-items: center;">
-          <a href="#" id="nav-gallery" onclick="showSection('gallery')" class="nav-link" style="height: 100%; display: flex; align-items: center;">
+      <nav style="display: flex; gap: 40px; font-size: 0.95rem; font-weight: 500; font-family: 'Work Sans', sans-serif;">
+        <div style="position: relative;">
+          <a href="#" id="nav-surfaces" onclick="showSection('surfaces')" class="nav-link">
             <span style="display: inline-flex; align-items: center; gap: 4px;">
-              Gallery<span style="display:inline-block; width: 8px;"></span><span id="gallery-caret" style="display: inline-block; transition: transform 0.3s ease;">▸</span>
+              Surfaces<span style="display:inline-block; width: 8px;"></span><span id="surfaces-caret" style="display: inline-block; transition: transform 0.3s ease;">▸</span>
             </span>
           </a>
-          <!-- Dropdown content -->
-          <div id="gallery-dropdown" style="display: none; position: absolute; top: 100%; left: 0; background: #fcf9f5b3; box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 10px 0; border-radius: 6px; z-index: 1001; min-width: 240px;">
+          <div id="surfaces-dropdown" style="display: none; position: absolute; top: 100%; left: 0; background: #fcf9f5b3; box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 10px 0; border-radius: 6px; z-index: 1001; min-width: 240px;">
             <a style="display: block; font-size: 1.3rem; padding: 6px 20px; color: #4c4c4c; text-decoration: none;">\(\circ\)  \( \mathbb{R}^3 \)</a>
             <a href="#" onclick="handleSurfaceNav('minimal-r3')" class="navigation-link">▸ Minimal surfaces</a>
             <a href="#" onclick="handleSurfaceNav('cmc-r3')"  class="navigation-link">▸ CMC \(1\) surfaces</a>
@@ -71,10 +69,10 @@
     <!-- Spacer below fixed header -->
     <div style="height: 60px;"></div>
 
-    <!-- Content Sections -->
-    <div id="gallery-section" style="display: none;"></div>
-    <div id="others-section" style="display: none;"></div>
-    <div id="about-section" style="display: none;"></div>
+    <!-- Sections -->
+    <div id="surfaces-section" style="display: none;"></div>
+    <div id="others-section"></div>
+    <div id="about-section"></div>
   </div>
 
   <!-- Footer -->
@@ -88,7 +86,7 @@
   <!-- Navigation handler -->
   <script>
     window.handleSurfaceNav = function(sectionId) {
-      showSection('gallery');
+      showSection('surfaces');
       setTimeout(() => {
         const heading = document.querySelector(`[data-section="${sectionId}"]`);
         const section = document.getElementById(sectionId);

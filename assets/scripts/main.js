@@ -1,43 +1,27 @@
-// main.js — Final version with full Safari fix, consistent ordering, and robust toggle logic
+// main.js
+// Dynamically load and structure the surfaces-section with minimal and CMC surfaces
 
 document.addEventListener('DOMContentLoaded', () => {
-  const othersFetch = fetch('includes/others.html')
-    .then(res => res.text())
-    .then(html => {
-      document.getElementById('others-section').innerHTML = html;
-    });
-
-  const aboutFetch = fetch('includes/about.html')
-    .then(res => res.text())
-    .then(html => {
-      document.getElementById('about-section').innerHTML = html;
-    });
-
-  const galleryData = [
+  // Define surface section metadata with MathJax-formatted titles and group labels
+  const surfacesData = [
     { id: 'minimal-r3', title: String.raw`Minimal surfaces`, group: String.raw`\(\bigcirc\) \(\mathbb{R}^3\)` },
     { id: 'cmc-r3', title: String.raw`CMC \(1\) surfaces`, group: String.raw`\(\bigcirc\) \(\mathbb{R}^3\)` },
     { id: 'cmc-s3', title: String.raw`CMC \(1\) surfaces`, group: String.raw`\(\bigcirc\) \(\mathbb{S}^3\)` },
     { id: 'cmc-h3', title: String.raw`CMC \(1\) surfaces`, group: String.raw`\(\bigcirc\) \(\mathbb{H}^3\)` },
   ];
 
-  const contentFiles = {
-    'minimal-r3': ['enneper.html', 'scherk.html'],
-    'cmc-r3': [],
-    'cmc-s3': ['enneper.html', 'scherk.html'],
-    'cmc-h3': ['enneper.html', 'scherk.html'],
-  };
+  const container = document.getElementById('surfaces-section');
+  let currentGroup = '';
 
-  const buildGallery = () => {
-    const container = document.getElementById('gallery-section');
-    let currentGroup = '';
-    galleryData.forEach(({ id, title, group }) => {
-      if (group !== currentGroup) {
-        const groupDiv = document.createElement('div');
-        groupDiv.className = 'section-heading-wrapper';
-        groupDiv.innerHTML = `<div class="section-title">${group}</div>`;
-        container.appendChild(groupDiv);
-        currentGroup = group;
-      }
+  // Loop through each surface entry and generate group headings and content blocks
+  surfacesData.forEach(({ id, title, group }) => {
+    if (group && group !== currentGroup) {
+      const groupDiv = document.createElement('div');
+      groupDiv.className = 'section-heading-wrapper';
+      groupDiv.innerHTML = `<div class="section-title">${group}</div>`;
+      container.appendChild(groupDiv);
+      currentGroup = group;
+    }
 
       const headingWrapper = document.createElement('div');
       headingWrapper.className = 'section-heading-wrapper';
@@ -127,8 +111,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Navigation switcher
   window.showSection = function (target) {
-    const sections = ['others', 'gallery', 'about'];
-    const navs = ['nav-others', 'nav-gallery', 'nav-about'];
+    const sections = ['others', 'surfaces', 'about'];
+    const navs = ['nav-others', 'nav-surfaces', 'nav-about'];
     sections.forEach(id => {
       const el = document.getElementById(id + '-section');
       if (el) el.style.display = (id === target) ? 'block' : 'none';
@@ -138,8 +122,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (nav) nav.classList.toggle('active', id === 'nav-' + target);
     });
 
-    if (target !== 'gallery') {
-      const openSections = document.querySelectorAll('#gallery-section .open');
+    // ✅ Close all expanded subsections when leaving the surfaces section
+    if (target !== 'surfaces') {
+      const openSections = document.querySelectorAll('#surfaces-section .open');
       openSections.forEach(section => {
         const headingEl = section.previousElementSibling;
         if (headingEl && headingEl.classList.contains('section-heading')) {
@@ -149,16 +134,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // Gallery dropdown hover handler
-  const navGallery = document.getElementById('nav-gallery');
-  const dropdown = document.getElementById('gallery-dropdown');
-  navGallery.parentElement.addEventListener('mouseenter', () => {
+
+
+  // Setup dropdown behavior for "Surfaces" navigation item
+  const navSurfaces = document.getElementById('nav-surfaces');
+  const dropdown = document.getElementById('surfaces-dropdown');
+  navSurfaces.parentElement.addEventListener('mouseenter', () => {
     dropdown.style.display = 'block';
-    document.getElementById('gallery-caret').style.transform = 'rotate(90deg)';
+    document.getElementById('surfaces-caret').style.transform = 'rotate(90deg)';
   });
-  navGallery.parentElement.addEventListener('mouseleave', () => {
+  navSurfaces.parentElement.addEventListener('mouseleave', () => {
     dropdown.style.display = 'none';
-    document.getElementById('gallery-caret').style.transform = 'rotate(0deg)';
+    document.getElementById('surfaces-caret').style.transform = 'rotate(0deg)';
   });
 
   // Scroll to section by ID
@@ -167,19 +154,24 @@ document.addEventListener('DOMContentLoaded', () => {
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  // Scroll and open specific gallery subsection
+  // Show the "surfaces" section by default when the page loads
+  showSection('surfaces');
+
   window.handleSurfaceNav = function(sectionId) {
-    showSection('gallery');
-    setTimeout(() => {
-      const heading = document.querySelector(`[data-section="${sectionId}"]`);
-      const section = document.getElementById(sectionId);
-      if (heading && section) {
-        const isOpen = section.classList.contains('open');
-        if (!isOpen) heading.click();
-        const yOffset = -60;
-        const y = heading.getBoundingClientRect().top + window.pageYOffset + yOffset;
-        window.scrollTo({ top: y, behavior: 'smooth' });
-      }
-    }, 300);
-  };
+  showSection('surfaces');
+  setTimeout(() => {
+    const heading = document.querySelector(`[data-section="${sectionId}"]`);
+    const section = document.getElementById(sectionId);
+    if (heading && section) {
+      const isOpen = section.classList.contains('open');
+      if (!isOpen) heading.click(); // Only toggle if not already open
+
+      // Adjust for fixed navigation bar (60px height)
+      const yOffset = -60;
+      const y = heading.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  }, 300);
+};
+
 });
