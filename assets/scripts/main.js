@@ -4,10 +4,10 @@
 document.addEventListener('DOMContentLoaded', () => {
   // Define surface section metadata with MathJax-formatted titles and group labels
   const surfacesData = [
-    { id: 'minimal-r3', title: String.raw`Minimal surfaces`, group: String.raw`\(\bigcirc\) \(\mathbb{R}^3\)` },
-    { id: 'cmc-r3', title: String.raw`CMC \(1\) surfaces`, group: String.raw`\(\bigcirc\) \(\mathbb{R}^3\)` },
-    { id: 'cmc-s3', title: String.raw`CMC \(1\) surfaces`, group: String.raw`\(\bigcirc\) \(\mathbb{S}^3\)` },
-    { id: 'cmc-h3', title: String.raw`CMC \(1\) surfaces`, group: String.raw`\(\bigcirc\) \(\mathbb{H}^3\)` },
+    { id: 'minimal-r3', title: String.raw`Minimal surfaces in \(\mathbb{R}^3\)`, group: String.raw`\(\bigcirc\) Surfaces in \(\mathbb{R}^3\)` },
+    { id: 'cmc-r3', title: String.raw`CMC \(1\) surfaces in \(\mathbb{R}^3\)` },
+    { id: 'cmc-s3', title: String.raw`CMC \(1\) surfaces in \(\mathbb{S}^3\)`, group: String.raw`\(\bigcirc\) Surfaces in \(\mathbb{S}^3\)` },
+    { id: 'cmc-h3', title: String.raw`CMC \(1\) surfaces in \(\mathbb{H}^3\)`, group: String.raw`\(\bigcirc\) Surfaces in \(\mathbb{H}^3\)` },
   ];
 
   const container = document.getElementById('surfaces-section');
@@ -23,15 +23,15 @@ document.addEventListener('DOMContentLoaded', () => {
       currentGroup = group;
     }
 
-      const headingWrapper = document.createElement('div');
-      headingWrapper.className = 'section-heading-wrapper';
-      const heading = document.createElement('div');
-      heading.className = 'section-heading';
-      heading.innerHTML = `<span class="caret">▸</span>${title}`;
-      heading.setAttribute('data-section', id);
-      heading.onclick = () => toggleSection(heading, id);
-      headingWrapper.appendChild(heading);
-      container.appendChild(headingWrapper);
+    // Create collapsible section heading
+    const headingWrapper = document.createElement('div');
+    headingWrapper.className = 'section-heading-wrapper';
+    const heading = document.createElement('div');
+    heading.className = 'section-heading';
+    heading.innerHTML = `<span class="caret">▸</span>${title}`;
+    heading.onclick = () => toggleSection(heading, id);
+    headingWrapper.appendChild(heading);
+    container.appendChild(headingWrapper);
 
       const contentDiv = document.createElement('div');
       contentDiv.id = id;
@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // Navigation switcher
+  // Show the selected top-level section and highlight the corresponding nav tab
   window.showSection = function (target) {
     const sections = ['others', 'surfaces', 'about'];
     const navs = ['nav-others', 'nav-surfaces', 'nav-about'];
@@ -121,20 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const nav = document.getElementById(id);
       if (nav) nav.classList.toggle('active', id === 'nav-' + target);
     });
-
-    // ✅ Close all expanded subsections when leaving the surfaces section
-    if (target !== 'surfaces') {
-      const openSections = document.querySelectorAll('#surfaces-section .open');
-      openSections.forEach(section => {
-        const headingEl = section.previousElementSibling;
-        if (headingEl && headingEl.classList.contains('section-heading')) {
-          toggleSection(headingEl, section.id);
-        }
-      });
-    }
   };
-
-
 
   // Setup dropdown behavior for "Surfaces" navigation item
   const navSurfaces = document.getElementById('nav-surfaces');
@@ -156,20 +143,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Show the "surfaces" section by default when the page loads
   showSection('surfaces');
-
-  window.handleSurfaceNav = function(sectionId) {
-  showSection('surfaces');
-  setTimeout(() => {
-    const heading = document.querySelector(`[data-section="${sectionId}"]`);
-    const section = document.getElementById(sectionId);
-    if (heading && section) {
-      const isOpen = section.classList.contains('open');
-      if (!isOpen) heading.click(); // Only toggle if not already open
-
-      // Adjust for fixed navigation bar (60px height)
-      const yOffset = -60;
-      const y = heading.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: 'smooth' });
-    }
-  }, 300);
-};
+});
