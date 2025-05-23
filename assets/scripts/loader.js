@@ -145,3 +145,11 @@ toggleButton.addEventListener('click', () => {
   tocVisible = !tocVisible;
   tocSidebar.style.transform = tocVisible ? 'translateX(0)' : 'translateX(-100%)';
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+  const toggleButton = document.getElementById('toc-toggle');
+  const body = document.body;
+  toggleButton.addEventListener('click', () => {
+    body.classList.toggle('collapsed');
+  });
+});

@@ -28,7 +28,7 @@ h1, h2, h3, h4, h5, h6 {
   /* font-family: Georgia; */
   /* font-family: 'Times New Roman', Times, serif; */
 }
-.illustration-info h3, .illustration-info p, .view-link {
+.illustration-info h3, .illustration-info p, .view-link, a.toc-link{
   font-family: 'Times New Roman', Times, serif;
 }
 
@@ -207,11 +207,6 @@ footer {
   background-color: #fcf9f5;
 }
 
-/* Hover effect for dropdown menu items */
-#gallery-dropdown a:hover {
-  background-color: #dfdfdf;
-}
-
 /* Gallery section layout */
 #gallery-section {
   display: flex;
@@ -244,21 +239,6 @@ a.gallery-link:hover {
   color: #db6c6c;
   text-decoration: underline;
 }
-
-/* Navigation link styles
-a.navigation-link {
-  display: block;
-  padding: 0px 30px;
-  text-decoration: none;
-  color: #00796b;
-}
-
-a.navigation-link:hover {
-  display: block;
-  padding: 0px 30px;
-  text-decoration: none;
-  color: #db6c6c;
-} */
 
 /* Paragraph styling for general use */
 p {
@@ -316,11 +296,12 @@ p {
   width: 220px;
   padding: 20px;
   overflow-y: auto;
-  background: #f8f8f8;
-  border-right: 1px solid #ddd;
+  background: #eaeaea;
+  /* border-right: 3px solid #ddd; */
   font-family: 'Work Sans', sans-serif;
   font-size: 1.2rem;
   z-index: 999;
+  transition: transform 0.3s ease;
 }
 .content-wrapper {
   margin-left: 220px;
@@ -335,7 +316,19 @@ a.toc-link {
   text-decoration: none;
   color: #00796b;
   transition: color 0.2s ease;
+  font-weight: 500;
 }
 a.toc-link:hover {
   color: #db6c6c;
+}
+
+.content-wrapper {
+  transition: margin-left 0.3s ease;
+  margin-left: 220px;
+}
+.collapsed .content-wrapper {
+  margin-left: 0;
+}
+.collapsed #toc-sidebar {
+  transform: translateX(-100%);
 }
