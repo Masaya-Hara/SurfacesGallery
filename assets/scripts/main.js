@@ -104,8 +104,9 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     } else {
       section.style.maxHeight = section.scrollHeight + 'px';
-      void section.offsetHeight;
-      section.style.maxHeight = '0px';
+      requestAnimationFrame(() => {
+        section.style.maxHeight = '0px';
+      });
 
       section.addEventListener('transitionend', function handleClose(e) {
         if (e.propertyName !== 'max-height') return;
