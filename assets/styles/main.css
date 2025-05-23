@@ -1,19 +1,19 @@
-/* main.css — revised to fix navigation shadow and layout consistency across browsers */
-
-/* Base reset */
+/* Reset and base styling */
 html, body {
-  margin: 0;
   height: 100%;
-  font-family: 'Work Sans', sans-serif;
-  font-weight: 400;
-  background-color: #f1f1f1;
-  color: #4c4c4c;
-  line-height: 1.6;
+  margin: 0;
 }
 
-/* Page wrapper */
+body {
+  font-family: 'Work Sans', sans-serif;
+  background-color: #f1f1f1;
+  color: #4c4c4c;
+  line-height: 1.6; /* Improve text spacing */
+}
+
+/* Content wrapper with bottom padding for footer */
 .content-wrapper {
-  min-height: calc(100vh - 120px);
+  min-height: calc(100vh - 120px); /* Full height minus footer space */
   padding-bottom: 40px;
 }
 
@@ -34,7 +34,7 @@ html, body {
 }
 
 /* Navigation layout */
-#nav-surfaces {
+#nav-gallery {
   line-height: 1.6;
   display: inline-flex;
   align-items: center;
@@ -100,9 +100,8 @@ html, body {
 .illustration-item {
   display: flex;
   align-items: center;
-  flex-direction: row;
   gap: 20px;
-  background-color: #fbe1c5;
+  background-color: #d0e1eb;
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
@@ -120,27 +119,27 @@ html, body {
   margin: 0 0 8px;
   font-family: 'Playfair Display', serif;
   font-size: 1.3rem;
-  font-weight: 600;
 }
 
 .illustration-info p {
   margin: 0 0 10px;
   color: #4c4c4c;
-  text-align: justify; /* Align text to both left and right edges */
-  text-justify: inter-word;
-  letter-spacing: 0.02em; /* Slightly loosen spacing for readability */
+  font-family: serif;
+  /* text-align: justify; */
+  /* text-justify: inter-word; */
+  /* letter-spacing: 0.02em; Slightly loosen spacing for readability */
 }
 
-/* Button styling */
+/* View link styling */
 .view-link {
-  font-family: 'Work Sans', sans-serif;
-  font-weight: 600;
+  font-weight: bold;
   text-decoration: none;
   color: #4c4c4c;
   border: 1px solid #4c4c4c;
   padding: 6px 12px;
   border-radius: 6px;
   transition: 0.2s;
+  font-family: serif;
 }
 
 .view-link:hover {
@@ -159,7 +158,7 @@ html, body {
 #nav-others span, #nav-about span {
   display: inline-block;
   position: relative;
-  top: 2px;
+  top: .7px;
 }
 
 .nav-link.active {
@@ -181,7 +180,7 @@ html, body {
   }
 }
 
-/* Footer style */
+/* Footer styling */
 footer {
   text-align: center;
   font-size: 0.8rem;
@@ -191,12 +190,26 @@ footer {
 }
 
 /* Hover effect for dropdown menu items */
-#surfaces-dropdown a:hover {
+#gallery-dropdown a:hover {
   background-color: #dfdfdf;
+}
+
+/* Gallery section layout */
+#gallery-section {
+  display: flex;
+  padding: 30px 60px;
 }
 
 /* Others section layout */
 #others-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60px 20px;
+}
+
+/* About section layout */
+#about-section {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -214,10 +227,25 @@ a.gallery-link:hover {
   text-decoration: underline;
 }
 
+/* Navigation link styles */
+a.navigation-link {
+  display: block;
+  padding: 0px 30px;
+  text-decoration: none;
+  color: #00796b;
+}
+
+a.navigation-link:hover {
+  display: block;
+  padding: 0px 30px;
+  text-decoration: none;
+  color: #db6c6c;
+}
+
 /* Paragraph styling for general use */
 p {
-  text-align: justify;
+  text-align: justify; /* Full justification */
   text-justify: inter-word;
-  line-height: 1.6;
+  line-height: 1.6; /* Slightly tighter line spacing */
   letter-spacing: 0.02em;
 }

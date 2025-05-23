@@ -1,20 +1,20 @@
 // main.js
-// Dynamically load and structure the surfaces-section with minimal and CMC surfaces
+// Dynamically load and structure the gallery-section with minimal and CMC surfaces
 
 document.addEventListener('DOMContentLoaded', () => {
   // Define surface section metadata with MathJax-formatted titles and group labels
-  const surfacesData = [
-    { id: 'minimal-r3', title: String.raw`Minimal surfaces in \(\mathbb{R}^3\)`, group: String.raw`\(\bigcirc\) Surfaces in \(\mathbb{R}^3\)` },
-    { id: 'cmc-r3', title: String.raw`CMC \(1\) surfaces in \(\mathbb{R}^3\)` },
-    { id: 'cmc-s3', title: String.raw`CMC \(1\) surfaces in \(\mathbb{S}^3\)`, group: String.raw`\(\bigcirc\) Surfaces in \(\mathbb{S}^3\)` },
-    { id: 'cmc-h3', title: String.raw`CMC \(1\) surfaces in \(\mathbb{H}^3\)`, group: String.raw`\(\bigcirc\) Surfaces in \(\mathbb{H}^3\)` },
+  const galleryData = [
+    { id: 'minimal-r3', title: String.raw`Minimal surfaces`, group: String.raw`\(\bigcirc\) \(\mathbb{R}^3\)` },
+    { id: 'cmc-r3', title: String.raw`CMC \(1\) surfaces`, group: String.raw`\(\bigcirc\) \(\mathbb{R}^3\)` },
+    { id: 'cmc-s3', title: String.raw`CMC \(1\) surfaces`, group: String.raw`\(\bigcirc\) \(\mathbb{S}^3\)` },
+    { id: 'cmc-h3', title: String.raw`CMC \(1\) surfaces`, group: String.raw`\(\bigcirc\) \(\mathbb{H}^3\)` },
   ];
 
-  const container = document.getElementById('surfaces-section');
+  const container = document.getElementById('gallery-section');
   let currentGroup = '';
 
   // Loop through each surface entry and generate group headings and content blocks
-  surfacesData.forEach(({ id, title, group }) => {
+  galleryData.forEach(({ id, title, group }) => {
     if (group && group !== currentGroup) {
       const groupDiv = document.createElement('div');
       groupDiv.className = 'section-heading-wrapper';
@@ -29,90 +29,99 @@ document.addEventListener('DOMContentLoaded', () => {
     const heading = document.createElement('div');
     heading.className = 'section-heading';
     heading.innerHTML = `<span class="caret">▸</span>${title}`;
+    heading.setAttribute('data-section', id);
     heading.onclick = () => toggleSection(heading, id);
     headingWrapper.appendChild(heading);
     container.appendChild(headingWrapper);
 
-      const contentDiv = document.createElement('div');
-      contentDiv.id = id;
-      contentDiv.style.display = 'none';
-      container.appendChild(contentDiv);
-    });
+    // Ensure MathJax renders section titles immediately after insertion
+    if (window.MathJax) {
+      MathJax.typesetPromise([heading]);
+    }
+
+    // Create container for the inner contents of this surface category
+    const contentDiv = document.createElement('div');
+    contentDiv.id = id;
+    contentDiv.style.display = 'none';
+    contentDiv.style.transition = 'all 0.4s ease';
+    container.appendChild(contentDiv);
   });
 
-  const loadGalleryContent = () => {
-    const promises = [];
+  // Load HTML content for each section and render it
+  Promise.resolve().then(() => {
+    const contentFiles = {
+      'minimal-r3': ['scherk.html', 'enneper.html'],
+      'cmc-r3': [],
+      'cmc-s3': ['scherk.html', 'enneper.html'],
+      'cmc-h3': ['scherk.html', 'enneper.html'],
+    };
+
     Object.entries(contentFiles).forEach(([id, files]) => {
       const section = document.getElementById(id);
       files.forEach(file => {
-        const p = fetch(`includes/${file}`)
+        fetch(`includes/${file}`)
           .then(res => res.text())
           .then(html => {
             const wrapper = document.createElement('div');
             wrapper.classList.add('fade-in');
             wrapper.innerHTML = html;
             section.appendChild(wrapper);
-          });
-        promises.push(p);
-      });
-    });
-    return Promise.all(promises);
-  };
 
-  Promise.all([othersFetch, aboutFetch]).then(() => {
-    buildGallery();
-    loadGalleryContent().then(() => {
-      if (window.MathJax) {
-        MathJax.typesetPromise().then(() => showSection('gallery'));
-      } else {
-        showSection('gallery');
-      }
+            // Ensure MathJax renders dynamically inserted surface descriptions
+            if (window.MathJax) {
+              requestAnimationFrame(() => {
+                MathJax.typesetPromise([wrapper]);
+              });
+            }
+          });
+      });
     });
   });
 
-  // Toggle logic with Safari fallback
+  // Toggle the open/close state of a section
   window.toggleSection = function (headingEl, id) {
     const section = document.getElementById(id);
     const isOpen = section.classList.contains('open');
     headingEl.classList.toggle('active', !isOpen);
 
+    section.style.transition = 'max-height 0.8s ease';
+    section.style.overflow = 'hidden';
+    section.style.position = 'relative';
+    section.style.zIndex = '0';
+
     if (!isOpen) {
       section.classList.add('open');
       section.style.display = 'block';
       section.style.maxHeight = '0px';
-      requestAnimationFrame(() => {
-        section.style.transition = 'max-height 0.6s ease';
-        section.style.maxHeight = section.scrollHeight + 'px';
-      });
-      section.addEventListener('transitionend', function finalizeOpen(e) {
-        if (e.propertyName === 'max-height') {
-          section.style.maxHeight = 'none';
-          section.style.overflow = 'visible';
-          section.removeEventListener('transitionend', finalizeOpen);
-        }
-      }, { once: true });
-    } else {
-      section.style.transition = 'max-height 0.6s ease';
+      void section.offsetHeight;
       section.style.maxHeight = section.scrollHeight + 'px';
-      requestAnimationFrame(() => {
-        section.style.maxHeight = '0px';
+
+      section.addEventListener('transitionend', function handleOpen(e) {
+        if (e.propertyName !== 'max-height') return;
+        section.style.maxHeight = 'none';
+        section.style.overflow = 'visible';
+        section.removeEventListener('transitionend', handleOpen);
       });
-      section.addEventListener('transitionend', function finalizeClose(e) {
-        if (e.propertyName === 'max-height') {
-          section.classList.remove('open');
-          section.style.display = 'none';
-          section.style.overflow = 'visible';
-          section.style.maxHeight = 'none';
-          section.removeEventListener('transitionend', finalizeClose);
-        }
-      }, { once: true });
+    } else {
+      section.style.maxHeight = section.scrollHeight + 'px';
+      void section.offsetHeight;
+      section.style.maxHeight = '0px';
+
+      section.addEventListener('transitionend', function handleClose(e) {
+        if (e.propertyName !== 'max-height') return;
+        section.classList.remove('open');
+        section.style.display = 'none';
+        section.style.overflow = 'visible';
+        section.style.maxHeight = 'none';
+        section.removeEventListener('transitionend', handleClose);
+      });
     }
   };
 
-  // Show the selected top-level section and highlight the corresponding nav tab
+  // Navigation toggling for top bar
   window.showSection = function (target) {
-    const sections = ['others', 'surfaces', 'about'];
-    const navs = ['nav-others', 'nav-surfaces', 'nav-about'];
+    const sections = ['others', 'gallery', 'about'];
+    const navs = ['nav-others', 'nav-gallery', 'nav-about'];
     sections.forEach(id => {
       const el = document.getElementById(id + '-section');
       if (el) el.style.display = (id === target) ? 'block' : 'none';
@@ -121,26 +130,57 @@ document.addEventListener('DOMContentLoaded', () => {
       const nav = document.getElementById(id);
       if (nav) nav.classList.toggle('active', id === 'nav-' + target);
     });
+
+    // ✅ Close all expanded subsections when leaving the gallery section
+    if (target !== 'gallery') {
+      const openSections = document.querySelectorAll('#gallery-section .open');
+      openSections.forEach(section => {
+        const headingEl = section.previousElementSibling;
+        if (headingEl && headingEl.classList.contains('section-heading')) {
+          toggleSection(headingEl, section.id);
+        }
+      });
+    }
   };
 
-  // Setup dropdown behavior for "Surfaces" navigation item
-  const navSurfaces = document.getElementById('nav-surfaces');
-  const dropdown = document.getElementById('surfaces-dropdown');
-  navSurfaces.parentElement.addEventListener('mouseenter', () => {
+
+
+  // Setup dropdown behavior for "Gallery" navigation item
+  const navGallery = document.getElementById('nav-gallery');
+  const dropdown = document.getElementById('gallery-dropdown');
+  navGallery.parentElement.addEventListener('mouseenter', () => {
     dropdown.style.display = 'block';
-    document.getElementById('surfaces-caret').style.transform = 'rotate(90deg)';
+    document.getElementById('gallery-caret').style.transform = 'rotate(90deg)';
   });
-  navSurfaces.parentElement.addEventListener('mouseleave', () => {
+  navGallery.parentElement.addEventListener('mouseleave', () => {
     dropdown.style.display = 'none';
-    document.getElementById('surfaces-caret').style.transform = 'rotate(0deg)';
+    document.getElementById('gallery-caret').style.transform = 'rotate(0deg)';
   });
 
-  // Scroll to section by ID
+  // Smooth scroll to a specific surface subsection
   window.scrollToSection = function (id) {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  // Show the "surfaces" section by default when the page loads
-  showSection('surfaces');
+  // Show the "gallery" section by default when the page loads
+  showSection('gallery');
+
+  window.handleSurfaceNav = function(sectionId) {
+  showSection('gallery');
+  setTimeout(() => {
+    const heading = document.querySelector(`[data-section="${sectionId}"]`);
+    const section = document.getElementById(sectionId);
+    if (heading && section) {
+      const isOpen = section.classList.contains('open');
+      if (!isOpen) heading.click(); // Only toggle if not already open
+
+      // Adjust for fixed navigation bar (60px height)
+      const yOffset = -60;
+      const y = heading.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  }, 300);
+};
+
 });
