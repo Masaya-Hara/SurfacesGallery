@@ -1,6 +1,5 @@
-// assets/scripts/loader.js
+// loader.js
 
-// Load gallery content from JSON
 document.addEventListener("DOMContentLoaded", () => {
   fetch('includes/gallery-data.json')
     .then(res => res.json())
@@ -37,7 +36,6 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
 
-  // Load additional sections
   fetch('includes/others.html')
     .then(res => res.text())
     .then(html => {
@@ -53,19 +51,36 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+// TOC toggle functionality
 function showSection(target) {
-  const sections = ['gallery', 'others', 'about'];
-  const navs = ['nav-gallery', 'nav-others', 'nav-about'];
+  const sections = ['others', 'gallery', 'about'];
+  const navs = ['nav-others', 'nav-gallery', 'nav-about'];
+  const body = document.body;
+
   sections.forEach(id => {
     const el = document.getElementById(id + '-section');
     if (el) el.style.display = (id === target) ? 'block' : 'none';
   });
+
   navs.forEach(id => {
     const nav = document.getElementById(id);
     if (nav) nav.classList.toggle('active', id === 'nav-' + target);
   });
+
+  body.classList.toggle('gallery-active', target === 'gallery');
+
+  // Ensure sidebar is hidden at first
+  const sidebar = document.getElementById('toc-sidebar');
+  if (target === 'gallery') {
+    body.classList.add('collapsed');
+    sidebar.style.transform = 'translateX(-100%)';
+  } else {
+    body.classList.remove('collapsed');
+    sidebar.style.transform = 'translateX(-100%)';
+  }
 }
 
+window.showSection = showSection;
 
 document.addEventListener("DOMContentLoaded", () => {
   const observer = new MutationObserver(() => {
@@ -136,20 +151,22 @@ document.addEventListener("DOMContentLoaded", () => {
       counter.textContent = `${currentIndex + 1}/${matches.length}`;
     }
   });
-});
 
-const toggleButton = document.getElementById('toc-toggle');
-const tocSidebar = document.getElementById('toc-sidebar');
-let tocVisible = true;
-toggleButton.addEventListener('click', () => {
-  tocVisible = !tocVisible;
-  tocSidebar.style.transform = tocVisible ? 'translateX(0)' : 'translateX(-100%)';
-});
-
-document.addEventListener('DOMContentLoaded', () => {
   const toggleButton = document.getElementById('toc-toggle');
-  const body = document.body;
-  toggleButton.addEventListener('click', () => {
-    body.classList.toggle('collapsed');
-  });
+  const tocSidebar = document.getElementById('toc-sidebar');
+
+  if (toggleButton) {
+    toggleButton.addEventListener('click', () => {
+      document.body.classList.toggle('collapsed');
+      if (document.body.classList.contains('collapsed')) {
+        tocSidebar.style.transform = 'translateX(-100%)';
+      } else {
+        tocSidebar.style.transform = 'translateX(0)';
+      }
+    });
+  }
+
+  // 初期状態を gallery + collapsed に設定
+  showSection('gallery');
+  document.body.classList.add('collapsed');
 });

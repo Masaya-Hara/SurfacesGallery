@@ -5,19 +5,16 @@ html, body {
 }
 
 body {
-  /* font-family: 'Work Sans', sans-serif; */
   font-family: Georgia;
   font-weight: 500;
-  /* font-family: 'Times New Roman', Times, serif; */
   background-color: #f1f1f1;
   color: #4c4c4c;
-  line-height: 1.6; /* Improve text spacing */
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  /* font-family: 'Playfair Display', serif; */
   font-family: Georgia;
   font-weight: 600;
 }
@@ -25,18 +22,10 @@ h1, h2, h3, h4, h5, h6 {
 .hero, .section-title, .section-heading {
   font-family: 'Playfair Display', serif;
   font-weight: 600;
-  /* font-family: Georgia; */
-  /* font-family: 'Times New Roman', Times, serif; */
-}
-.illustration-info h3, .illustration-info p, .view-link, a.toc-link{
-  font-family: 'Times New Roman', Times, serif;
 }
 
-/* Content wrapper with bottom padding for footer */
-.content-wrapper {
-  min-height: calc(100vh - 120px); /* Full height minus footer space */
-  padding-bottom: 40px;
-  margin-left: 220px;
+.illustration-info h3, .illustration-info p, .view-link, a.toc-link{
+  font-family: 'Times New Roman', Times, serif;
 }
 
 /* Section layout and spacing */
@@ -52,7 +41,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #minimal-r3, #cmc-s3, #cmc-h3 {
-  padding: 0 35px; /* Left-right spacing */
+  padding: 0 35px;
 }
 
 /* Navigation layout */
@@ -79,7 +68,6 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: 1rem;
 }
 
-/* Section heading caret icon */
 .section-heading .caret {
   display: inline-block;
   transition: transform 0.3s ease;
@@ -90,7 +78,6 @@ h1, h2, h3, h4, h5, h6 {
   transform: rotate(90deg);
 }
 
-/* Section title design */
 .section-title {
   font-size: 2.1rem;
   margin: 50px 20px 10px;
@@ -100,7 +87,6 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.2;
 }
 
-/* Section heading */
 .section-heading {
   font-size: 1.5rem;
   margin: 0px 20px 0px;
@@ -114,7 +100,6 @@ h1, h2, h3, h4, h5, h6 {
   background-color: #dfdfdf;
 }
 
-/* Illustration item box */
 .illustration-item {
   display: flex;
   align-items: center;
@@ -147,7 +132,6 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: 0.02em;
 }
 
-/* View link styling */
 .view-link {
   font-weight: bold;
   text-decoration: none;
@@ -164,7 +148,6 @@ h1, h2, h3, h4, h5, h6 {
   color: #fff;
 }
 
-/* Navigation link styling */
 .nav-link {
   color: #4c4c4c;
   font-weight: 500;
@@ -184,7 +167,6 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
 }
 
-/* Animation for content entrance */
 .fade-in {
   opacity: 0;
   transform: translateY(10px);
@@ -198,7 +180,6 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-/* Footer styling */
 footer {
   text-align: center;
   font-size: 0.8rem;
@@ -207,13 +188,11 @@ footer {
   background-color: #fcf9f5;
 }
 
-/* Gallery section layout */
 #gallery-section {
   display: flex;
   padding: 30px 60px;
 }
 
-/* Others section layout */
 #others-section {
   display: flex;
   flex-direction: column;
@@ -221,7 +200,6 @@ footer {
   padding: 60px 20px;
 }
 
-/* About section layout */
 #about-section {
   display: flex;
   flex-direction: column;
@@ -229,7 +207,6 @@ footer {
   padding: 60px 20px;
 }
 
-/* Gallery link styles */
 a.gallery-link {
   color: #00796b;
   text-decoration: underline;
@@ -240,11 +217,10 @@ a.gallery-link:hover {
   text-decoration: underline;
 }
 
-/* Paragraph styling for general use */
 p {
-  text-align: justify; /* Full justification */
+  text-align: justify;
   text-justify: inter-word;
-  line-height: 1.6; /* Slightly tighter line spacing */
+  line-height: 1.6;
   letter-spacing: 0.02em;
 }
 
@@ -297,19 +273,36 @@ p {
   padding: 20px;
   overflow-y: auto;
   background: #eaeaea;
-  /* border-right: 3px solid #ddd; */
   font-family: 'Work Sans', sans-serif;
   font-size: 1.2rem;
   z-index: 999;
   transition: transform 0.3s ease;
 }
-.content-wrapper {
-  margin-left: 220px;
+
+#toc-sidebar,
+#toc-toggle {
+  display: none;
 }
+
+body.gallery-active #toc-sidebar,
+body.gallery-active #toc-toggle {
+  display: block;
+}
+
+body.gallery-active .content-wrapper {
+  margin-left: 220px;
+  transition: margin-left 0.3s ease;
+}
+
+body.gallery-active.collapsed .content-wrapper {
+  margin-left: 0;
+}
+
 #toc-list {
   list-style: none;
   padding-left: 0;
 }
+
 a.toc-link {
   display: block;
   padding: 4px 0px;
@@ -318,17 +311,7 @@ a.toc-link {
   transition: color 0.2s ease;
   font-weight: 500;
 }
+
 a.toc-link:hover {
   color: #db6c6c;
-}
-
-.content-wrapper {
-  transition: margin-left 0.3s ease;
-  margin-left: 220px;
-}
-.collapsed .content-wrapper {
-  margin-left: 0;
-}
-.collapsed #toc-sidebar {
-  transform: translateX(-100%);
 }
