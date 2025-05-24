@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Thumbnail Viewer</title>
+  <style>
+    /* Make entire page transparent and center content */
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: transparent;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    img {
+      width: 800px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Image will be dynamically loaded based on query parameter -->
+  <img id="image" src="" alt="Transparent Image">
+
+  <script>
+    // Get ?img=... from the URL
+    const params = new URLSearchParams(window.location.search);
+    const imgSrc = params.get('img');
+
+    // Set image source if specified
+    if (imgSrc) {
+      document.getElementById('image').src = imgSrc;
+    } else {
+      document.body.innerHTML = "<p style='color:#333;'>No image specified.</p>";
+    }
+  </script>
+</body>
+</html>

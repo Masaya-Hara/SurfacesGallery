@@ -51,6 +51,27 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById('about-section').innerHTML = html;
       if (window.MathJax) MathJax.typesetPromise();
     });
+  
+  // Handle in-page anchor links to illustrations
+  document.body.addEventListener('click', (e) => {
+    const target = e.target.closest('a[href^="#illustration-"]');
+    if (!target) return;
+
+    const id = target.getAttribute('href').slice(1);
+    const targetEl = document.getElementById(id);
+    if (!targetEl) return;
+
+    // 自動で該当 details セクションを開く
+    const details = targetEl.closest('details');
+    if (details && !details.open) details.open = true;
+
+    // スムーズスクロール
+    setTimeout(() => {
+      targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 100);
+
+    e.preventDefault();  // ページジャンプ防止
+  });
 });
 
 // TOC toggle functionality

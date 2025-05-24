@@ -112,11 +112,20 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .illustration-item img {
-  width: 100%;
-  height: auto;
+  width: 200px;
+  height: 200px;
   object-fit: contain;
-  min-width: 100px;
-  max-width: 200px;
+  border-radius: 8px;
+  display: block;
+}
+
+.illustration-item a img {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.illustration-item a:hover img {
+  transform: scale(1.2);
 }
 
 .illustration-info h3 {
@@ -210,12 +219,12 @@ footer {
 
 a.gallery-link {
   color: #00796b;
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 a.gallery-link:hover {
   color: #db6c6c;
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 p {

@@ -4,7 +4,7 @@
     "id": "minimal-r3",
     "title": "Minimal surfaces",
     "prefix": "r3/minimal/",
-    "items": ["enneper.html", "catenoid.html", "helicoid.html"]
+    "items": ["plane.html", "enneper.html", "catenoid.html", "helicoid.html"]
   },
   {
     "group": "⚪︎ \\(\\mathbb{R}^3\\)",
