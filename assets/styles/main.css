@@ -40,10 +40,6 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0 15px;
 }
 
-#minimal-r3, #cmc-s3, #cmc-h3 {
-  padding: 0 35px;
-}
-
 /* Navigation layout */
 #nav-gallery {
   line-height: 1.6;
