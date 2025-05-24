@@ -1,13 +1,18 @@
-// main.js
+// loader.js
 
-document.addEventListener("DOMContentLoaded", () => {
+// Wait for full window load to ensure MathJax is initialized
+window.addEventListener("load", async () => {
+  if (window.MathJax && MathJax.startup) {
+    await MathJax.startup.promise;
+  }
+
   fetch('includes/gallery-data.json')
     .then(res => res.json())
-    .then(data => {
+    .then(async data => {
       const container = document.getElementById('gallery-section');
       let currentGroup = '';
 
-      data.forEach(section => {
+      for (const section of data) {
         if (section.group !== currentGroup) {
           const g = document.createElement('div');
           g.className = 'section-heading-wrapper';
@@ -22,20 +27,21 @@ document.addEventListener("DOMContentLoaded", () => {
                              <div class="section-content" id="${section.id}"></div>`;
         container.appendChild(details);
 
-        // Use prefix if present, otherwise use item path directly
-        section.items.forEach(file => {
+        for (const file of section.items) {
           const filePath = section.prefix ? `${section.prefix}${file}` : file;
-          fetch(`includes/${filePath}`)
-            .then(res => res.text())
-            .then(html => {
-              const wrapper = document.createElement('div');
-              wrapper.classList.add('illustration-item');
-              wrapper.innerHTML = html;
-              document.getElementById(section.id).appendChild(wrapper);
-              if (window.MathJax) MathJax.typesetPromise([wrapper]);
-            });
-        });
-      });
+          const res = await fetch(`includes/${filePath}`);
+          const html = await res.text();
+          const wrapper = document.createElement('div');
+          wrapper.classList.add('illustration-item');
+          wrapper.innerHTML = html;
+          document.getElementById(section.id).appendChild(wrapper);
+        }
+      }
+
+      // Ensure MathJax is applied to the entire document after all content is added
+      if (window.MathJax && MathJax.typesetPromise) {
+        await MathJax.typesetPromise();
+      }
     });
 
   fetch('includes/others.html')
@@ -51,8 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById('about-section').innerHTML = html;
       if (window.MathJax) MathJax.typesetPromise();
     });
-  
-  // Handle in-page anchor links to illustrations
+
   document.body.addEventListener('click', (e) => {
     const target = e.target.closest('a[href^="#illustration-"]');
     if (!target) return;
@@ -61,20 +66,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const targetEl = document.getElementById(id);
     if (!targetEl) return;
 
-    // 自動で該当 details セクションを開く
     const details = targetEl.closest('details');
     if (details && !details.open) details.open = true;
 
-    // スムーズスクロール
     setTimeout(() => {
       targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 100);
 
-    e.preventDefault();  // ページジャンプ防止
+    e.preventDefault();
   });
 });
 
-// TOC toggle functionality
 function showSection(target) {
   const sections = ['others', 'gallery', 'about'];
   const navs = ['nav-others', 'nav-gallery', 'nav-about'];
@@ -92,7 +94,6 @@ function showSection(target) {
 
   body.classList.toggle('gallery-active', target === 'gallery');
 
-  // Ensure sidebar is hidden at first
   const sidebar = document.getElementById('toc-sidebar');
   if (target === 'gallery') {
     body.classList.add('collapsed');
@@ -189,7 +190,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // 初期状態を gallery + collapsed に設定
   showSection('gallery');
   document.body.classList.add('collapsed');
 });
