@@ -22,8 +22,10 @@ document.addEventListener("DOMContentLoaded", () => {
                              <div class="section-content" id="${section.id}"></div>`;
         container.appendChild(details);
 
+        // Use prefix if present, otherwise use item path directly
         section.items.forEach(file => {
-          fetch(`includes/${file}`)
+          const filePath = section.prefix ? `${section.prefix}${file}` : file;
+          fetch(`includes/${filePath}`)
             .then(res => res.text())
             .then(html => {
               const wrapper = document.createElement('div');
