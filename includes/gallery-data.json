@@ -4,7 +4,7 @@
     "id": "minimal-r3",
     "title": "Minimal surfaces",
     "prefix": "r3/minimal/",
-    "items": ["plane.html", "enneper.html", "catenoid.html", "helicoid.html"]
+    "items": ["minimal.html", "plane.html", "enneper.html", "catenoid.html", "helicoid.html"]
   },
   {
     "group": "⚪︎ \\(\\mathbb{R}^3\\)",
@@ -24,7 +24,8 @@
     "group": "⚪︎ \\(\\mathbb{S}^3\\)",
     "id": "cmc-s3",
     "title": "CMC \\(1\\) surfaces",
-    "items": ["sample.html"]
+    "prefix": "s3/cmc/",
+    "items": ["delaunay.html"]
   },
 
 

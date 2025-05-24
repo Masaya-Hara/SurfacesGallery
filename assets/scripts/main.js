@@ -1,185 +1,195 @@
 // main.js
-// Dynamically load and structure the gallery-section with minimal and CMC surfaces
 
-document.addEventListener('DOMContentLoaded', () => {
-  // Define surface section metadata with MathJax-formatted titles and group labels
-  const galleryData = [
-    { id: 'minimal-r3', title: String.raw`Minimal surfaces`, group: String.raw`\(\bigcirc\) \(\mathbb{R}^3\)` },
-    { id: 'cmc-r3', title: String.raw`CMC \(1\) surfaces`, group: String.raw`\(\bigcirc\) \(\mathbb{R}^3\)` },
-    { id: 'cmc-s3', title: String.raw`CMC \(1\) surfaces`, group: String.raw`\(\bigcirc\) \(\mathbb{S}^3\)` },
-    { id: 'cmc-h3', title: String.raw`CMC \(1\) surfaces`, group: String.raw`\(\bigcirc\) \(\mathbb{H}^3\)` },
-  ];
+document.addEventListener("DOMContentLoaded", () => {
+  fetch('includes/gallery-data.json')
+    .then(res => res.json())
+    .then(data => {
+      const container = document.getElementById('gallery-section');
+      let currentGroup = '';
 
-  const container = document.getElementById('gallery-section');
-  let currentGroup = '';
-
-  // Loop through each surface entry and generate group headings and content blocks
-  galleryData.forEach(({ id, title, group }) => {
-    if (group && group !== currentGroup) {
-      const groupDiv = document.createElement('div');
-      groupDiv.className = 'section-heading-wrapper';
-      groupDiv.innerHTML = `<div class="section-title">${group}</div>`;
-      container.appendChild(groupDiv);
-      currentGroup = group;
-    }
-
-    // Create collapsible section heading
-    const headingWrapper = document.createElement('div');
-    headingWrapper.className = 'section-heading-wrapper';
-    const heading = document.createElement('div');
-    heading.className = 'section-heading';
-    heading.innerHTML = `<span class="caret">▸</span>${title}`;
-    heading.setAttribute('data-section', id);
-    heading.onclick = () => toggleSection(heading, id);
-    headingWrapper.appendChild(heading);
-    container.appendChild(headingWrapper);
-
-    // Ensure MathJax renders section titles immediately after insertion
-    if (window.MathJax) {
-      MathJax.typesetPromise([heading]);
-    }
-
-    // Create container for the inner contents of this surface category
-    const contentDiv = document.createElement('div');
-    contentDiv.id = id;
-    contentDiv.style.display = 'none';
-    contentDiv.style.transition = 'all 0.4s ease';
-    container.appendChild(contentDiv);
-  });
-
-  // Load HTML content for each section and render it
-  Promise.resolve().then(() => {
-    const contentFiles = {
-      'minimal-r3': ['scherk.html', 'enneper.html'],
-      'cmc-r3': [],
-      'cmc-s3': ['scherk.html', 'enneper.html'],
-      'cmc-h3': ['scherk.html', 'enneper.html'],
-    };
-
-    Object.entries(contentFiles).forEach(([id, files]) => {
-      const section = document.getElementById(id);
-      files.forEach(file => {
-        fetch(`includes/${file}`)
-          .then(res => res.text())
-          .then(html => {
-            const wrapper = document.createElement('div');
-            wrapper.classList.add('fade-in');
-            wrapper.innerHTML = html;
-            section.appendChild(wrapper);
-
-            // Ensure MathJax renders dynamically inserted surface descriptions
-            if (window.MathJax) {
-              requestAnimationFrame(() => {
-                MathJax.typesetPromise([wrapper]);
-              });
-            }
-          });
-      });
-    });
-  });
-
-  // Toggle the open/close state of a section
-  window.toggleSection = function (headingEl, id) {
-    const section = document.getElementById(id);
-    const isOpen = section.classList.contains('open');
-    headingEl.classList.toggle('active', !isOpen);
-
-    section.style.transition = 'max-height 0.8s ease';
-    section.style.overflow = 'hidden';
-    section.style.position = 'relative';
-    section.style.zIndex = '0';
-
-    if (!isOpen) {
-      section.classList.add('open');
-      section.style.display = 'block';
-      section.style.maxHeight = '0px';
-      void section.offsetHeight;
-      section.style.maxHeight = section.scrollHeight + 'px';
-
-      section.addEventListener('transitionend', function handleOpen(e) {
-        if (e.propertyName !== 'max-height') return;
-        section.style.maxHeight = 'none';
-        section.style.overflow = 'visible';
-        section.removeEventListener('transitionend', handleOpen);
-      });
-    } else {
-      section.style.maxHeight = section.scrollHeight + 'px';
-      requestAnimationFrame(() => {
-        section.style.maxHeight = '0px';
-      });
-
-      section.addEventListener('transitionend', function handleClose(e) {
-        if (e.propertyName !== 'max-height') return;
-        section.classList.remove('open');
-        section.style.display = 'none';
-        section.style.overflow = 'visible';
-        section.style.maxHeight = 'none';
-        section.removeEventListener('transitionend', handleClose);
-      });
-    }
-  };
-
-  // Navigation toggling for top bar
-  window.showSection = function (target) {
-    const sections = ['others', 'gallery', 'about'];
-    const navs = ['nav-others', 'nav-gallery', 'nav-about'];
-    sections.forEach(id => {
-      const el = document.getElementById(id + '-section');
-      if (el) el.style.display = (id === target) ? 'block' : 'none';
-    });
-    navs.forEach(id => {
-      const nav = document.getElementById(id);
-      if (nav) nav.classList.toggle('active', id === 'nav-' + target);
-    });
-
-    // ✅ Close all expanded subsections when leaving the gallery section
-    if (target !== 'gallery') {
-      const openSections = document.querySelectorAll('#gallery-section .open');
-      openSections.forEach(section => {
-        const headingEl = section.previousElementSibling;
-        if (headingEl && headingEl.classList.contains('section-heading')) {
-          toggleSection(headingEl, section.id);
+      data.forEach(section => {
+        if (section.group !== currentGroup) {
+          const g = document.createElement('div');
+          g.className = 'section-heading-wrapper';
+          g.innerHTML = `<div class="section-title">${section.group}</div>`;
+          container.appendChild(g);
+          currentGroup = section.group;
         }
+
+        const details = document.createElement('details');
+        details.className = 'surface-section';
+        details.innerHTML = `<summary class="section-heading">${section.title}</summary>
+                             <div class="section-content" id="${section.id}"></div>`;
+        container.appendChild(details);
+
+        // Use prefix if present, otherwise use item path directly
+        section.items.forEach(file => {
+          const filePath = section.prefix ? `${section.prefix}${file}` : file;
+          fetch(`includes/${filePath}`)
+            .then(res => res.text())
+            .then(html => {
+              const wrapper = document.createElement('div');
+              wrapper.classList.add('illustration-item');
+              wrapper.innerHTML = html;
+              document.getElementById(section.id).appendChild(wrapper);
+              if (window.MathJax) MathJax.typesetPromise([wrapper]);
+            });
+        });
       });
-    }
-  };
+    });
 
-  // Setup dropdown behavior for "Gallery" navigation item
-  const navGallery = document.getElementById('nav-gallery');
-  const dropdown = document.getElementById('gallery-dropdown');
-  navGallery.parentElement.addEventListener('mouseenter', () => {
-    dropdown.style.display = 'block';
-    document.getElementById('gallery-caret').style.transform = 'rotate(90deg)';
+  fetch('includes/others.html')
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById('others-section').innerHTML = html;
+      if (window.MathJax) MathJax.typesetPromise();
+    });
+
+  fetch('includes/about.html')
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById('about-section').innerHTML = html;
+      if (window.MathJax) MathJax.typesetPromise();
+    });
+  
+  // Handle in-page anchor links to illustrations
+  document.body.addEventListener('click', (e) => {
+    const target = e.target.closest('a[href^="#illustration-"]');
+    if (!target) return;
+
+    const id = target.getAttribute('href').slice(1);
+    const targetEl = document.getElementById(id);
+    if (!targetEl) return;
+
+    // 自動で該当 details セクションを開く
+    const details = targetEl.closest('details');
+    if (details && !details.open) details.open = true;
+
+    // スムーズスクロール
+    setTimeout(() => {
+      targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 100);
+
+    e.preventDefault();  // ページジャンプ防止
   });
-  navGallery.parentElement.addEventListener('mouseleave', () => {
-    dropdown.style.display = 'none';
-    document.getElementById('gallery-caret').style.transform = 'rotate(0deg)';
+});
+
+// TOC toggle functionality
+function showSection(target) {
+  const sections = ['others', 'gallery', 'about'];
+  const navs = ['nav-others', 'nav-gallery', 'nav-about'];
+  const body = document.body;
+
+  sections.forEach(id => {
+    const el = document.getElementById(id + '-section');
+    if (el) el.style.display = (id === target) ? 'block' : 'none';
   });
 
-  // Smooth scroll to a specific surface subsection
-  window.scrollToSection = function (id) {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
+  navs.forEach(id => {
+    const nav = document.getElementById(id);
+    if (nav) nav.classList.toggle('active', id === 'nav-' + target);
+  });
 
-  // Show the "gallery" section by default when the page loads
-  showSection('gallery');
+  body.classList.toggle('gallery-active', target === 'gallery');
 
-  window.handleSurfaceNav = function(sectionId) {
-  showSection('gallery');
-  setTimeout(() => {
-    const heading = document.querySelector(`[data-section="${sectionId}"]`);
-    const section = document.getElementById(sectionId);
-    if (heading && section) {
-      const isOpen = section.classList.contains('open');
-      if (!isOpen) heading.click(); // Only toggle if not already open
+  // Ensure sidebar is hidden at first
+  const sidebar = document.getElementById('toc-sidebar');
+  if (target === 'gallery') {
+    body.classList.add('collapsed');
+    sidebar.style.transform = 'translateX(-100%)';
+  } else {
+    body.classList.remove('collapsed');
+    sidebar.style.transform = 'translateX(-100%)';
+  }
+}
 
-      // Adjust for fixed navigation bar (60px height)
-      const yOffset = -60;
-      const y = heading.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: 'smooth' });
+window.showSection = showSection;
+
+document.addEventListener("DOMContentLoaded", () => {
+  const observer = new MutationObserver(() => {
+    document.querySelectorAll(".surface-section summary").forEach(summary => {
+      if (!summary.querySelector(".caret")) {
+        const caret = document.createElement("span");
+        caret.className = "caret";
+        caret.innerHTML = '▸<span style="display:inline-block; width: 10px;"></span>';
+        summary.prepend(caret);
+      }
+      summary.addEventListener("click", () => {
+        setTimeout(() => {
+          summary.classList.toggle("active", summary.parentElement.hasAttribute("open"));
+        }, 0);
+      });
+    });
+  });
+  observer.observe(document.getElementById("gallery-section"), { childList: true, subtree: true });
+
+  const searchInput = document.getElementById('search-input');
+  let matches = [];
+  let currentIndex = -1;
+
+  function updateHighlights(query) {
+    document.querySelectorAll('.highlight-match').forEach(el => {
+      const parent = el.parentNode;
+      parent.replaceChild(document.createTextNode(el.textContent), el);
+      parent.normalize();
+    });
+    matches = [];
+    currentIndex = -1;
+    const counter = document.getElementById('search-counter');
+    counter.textContent = '';
+    if (!query) return;
+    const elements = document.querySelectorAll('.illustration-info h3, .illustration-info p');
+    elements.forEach(el => {
+      const text = el.textContent;
+      const regex = new RegExp(`(${query})`, 'gi');
+      if (regex.test(text)) {
+        el.innerHTML = text.replace(regex, '<span class="highlight-match">$1</span>');
+        matches.push(...el.querySelectorAll('.highlight-match'));
+      }
+    });
+    if (matches.length > 0) {
+      counter.textContent = `1/${matches.length}`;
+      currentIndex = 0;
+      matches[0].classList.add('highlight-current');
     }
-  }, 300);
-};
+  }
 
+  searchInput.addEventListener('input', e => {
+    updateHighlights(e.target.value.trim());
+  });
+
+  searchInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && matches.length > 0) {
+      if (document.getElementById('gallery-section').style.display === 'none') {
+        showSection('gallery');
+      }
+      currentIndex = (currentIndex + 1) % matches.length;
+      matches.forEach(el => el.classList.remove('highlight-current'));
+      const current = matches[currentIndex];
+      current.classList.add('highlight-current');
+      const details = current.closest('details');
+      if (details && !details.open) details.open = true;
+      current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      const counter = document.getElementById('search-counter');
+      counter.textContent = `${currentIndex + 1}/${matches.length}`;
+    }
+  });
+
+  const toggleButton = document.getElementById('toc-toggle');
+  const tocSidebar = document.getElementById('toc-sidebar');
+
+  if (toggleButton) {
+    toggleButton.addEventListener('click', () => {
+      document.body.classList.toggle('collapsed');
+      if (document.body.classList.contains('collapsed')) {
+        tocSidebar.style.transform = 'translateX(-100%)';
+      } else {
+        tocSidebar.style.transform = 'translateX(0)';
+      }
+    });
+  }
+
+  // 初期状態を gallery + collapsed に設定
+  showSection('gallery');
+  document.body.classList.add('collapsed');
 });
