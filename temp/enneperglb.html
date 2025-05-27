@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Enneper Surface – GLB Viewer</title>
+  <link rel="stylesheet" href="model.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <header>Enneper</header>
+
+  <!-- Loading / Error -->
+  <div id="loading">Now loading GLB model…</div>
+  <div id="error" style="display:none;">Sorry, failed to load GLB file.</div>
+
+  <!-- UI Buttons -->
+  <button id="toggleAxes" class="controlBtn">Axes: OFF</button>
+  <button id="toggleEdges" class="controlBtn">Edges: OFF</button>
+
+  <!-- Opacity -->
+  <label id="opacityLabel">Opacity: <span id="opacityValue">1.00</span></label>
+  <input type="range" id="opacitySlider" min="0" max="1" step="0.01" value="1" />
+
+  <!-- Transform Controls -->
+  <button id="zoomInBtn" class="controlBtn">&#65291;</button>
+  <button id="zoomOutBtn" class="controlBtn">&#65293;</button>
+  <button id="moveLeftBtn" class="controlBtn">←</button>
+  <button id="moveRightBtn" class="controlBtn">→</button>
+  <button id="moveUpBtn" class="controlBtn">↑</button>
+  <button id="moveDownBtn" class="controlBtn">↓</button>
+  <button id="resetBtn" class="controlBtn">Reset</button>
+
+  <!-- GLB Viewer Logic -->
+  <script type="module" src="enneper-glb.js" data-glb="enneper.glb"></script>
+</body>
+</html>

@@ -10,7 +10,8 @@
     "group": "⚪︎ \\(\\mathbb{R}^3\\)",
     "id": "cmc-r3",
     "title": "CMC \\(1\\) surfaces",
-    "items": ["sample.html", "sample.html"]
+    "prefix": "r3/cmc/",
+    "items": ["cmc.html"]
   },
   {
     "group": "⚪︎ \\(\\mathbb{R}^3\\)",
